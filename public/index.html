@@ -55,7 +55,7 @@
         </ul> -->
         <h3> {{ paper.title }} </h3>
         <h5> Authors: </h5>
-        <span ng-repeat="author in paper.authors"> {{ paper.authors.joinBy:',' }} </span>
+        <span ng-repeat="author in paper.authors"> {{ paper.authors.joinBy(',') }} </span>
         <h5> Topics: </h5>
         <span ng-repeat="topic in paper.topics"> {{ topic }} </span>
         <h5> Conferences: </h5>
