@@ -177,14 +177,23 @@ myApp.controller('MainController', function($scope) {
   // $scope.sys = arbor.ParticleSystem();
   // $scope.sys.renderer = myRenderer;
 
-  $scope.showGraph = false;
+  $scope.showGraph = true;
 
-  $scope.filters = [ 'Topic', 'Size', 'Penis']
+  $scope.filters = [ 'Topic', 'Size' ]
+
+  $scope.paper = {
+    title: 'Sample Paper',
+    authors: ['Xue, Alfred', 'Man, Colin', 'Yee, Spencer'],
+    topics: ['Computer Vision', 'Natural Language Processing', 'Machine Learning'],
+    conferences: ['CS 194 Spring Fair'],
+    link: 'http://www.google.com/pdf'
+  }
 
   $scope.search = function(query) {
     // alert(query);
     // get request for query here
     $scope.query = '';
+    // $scope.paper = $scope.samplePaper;
     $scope.showGraph = true;
   }
 
