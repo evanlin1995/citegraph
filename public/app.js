@@ -75,7 +75,7 @@ myApp.controller('MainController', function($scope) {
   // $scope.sys = arbor.ParticleSystem();
   // $scope.sys.renderer = myRenderer;
 
-  $scope.showGraph = true;
+  $scope.showGraph = false;
 
   $scope.filters = [ 'Topic', 'Size' ]
 
