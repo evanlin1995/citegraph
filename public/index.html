@@ -19,7 +19,10 @@
 
   <div class="container" ng-show="!showGraph">
     <img src="K2KZJ72SBY.jpg" id="background">
-    <div class="row" ng-hide="query">
+<!--     <div class="row" ng-hide="query">
+      <div class="col-md-12" style="height: 225px"></div>
+    </div> -->
+    <div class="row">
       <div class="col-md-12" style="height: 225px"></div>
     </div>
     <div class="row">
@@ -55,13 +58,13 @@
         </ul> -->
         <h3> {{ paper.title }} </h3>
         <h5> Authors: </h5>
-        <span ng-repeat="author in paper.authors"> {{ paper.authors.joinBy(',') }} </span>
+        <span ng-repeat="author in paper.authors">{{ author }}{{$last ? '' : '; '}}</span>
         <h5> Topics: </h5>
-        <span ng-repeat="topic in paper.topics"> {{ topic }} </span>
+        <span ng-repeat="topic in paper.topics">{{ topic }}{{$last ? '' : ', '}}</span>
         <h5> Conferences: </h5>
-        <span ng-repeat="conf in paper.conferences"> {{ conf }} </span>
+        <span ng-repeat="conf in paper.conferences">{{ conf }}{{$last ? '' : ', '}}</span>
         <h5> Link: </h5>
-        <a href="{{paper.link}}"> {{ paper.link }} </span>
+        <a href="{{paper.link}}">{{ paper.link }}</a>
 
 <!--         <div class="checkbox">
           <label>
@@ -104,7 +107,10 @@
 
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
-  <script src="arbor.js"></script>
+  <script src="arbor/arbor.js"></script>
+  <script src="arbor/arbor-tween.js"></script>
+  <script src="arbor/graphics.js"></script>
+  <script src="arbor/renderer.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
