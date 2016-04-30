@@ -4,9 +4,8 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "babel src -d lib && mv lib/server.js server_compiled.js && node server_compiled.js",
-    "run-only": "node server_compiled.js",
+    "start": "node server_compiled.js",
+    "site": "babel src -d lib && mv lib/server.js server_compiled.js && node server_compiled.js",
     "build": "babel src -d lib"
   },
   "repository": {
