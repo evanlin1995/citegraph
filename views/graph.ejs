@@ -1,0 +1,48 @@
+<div class="container container-full">
+  <div class="row row-full">
+    <div class="col-md-3" id="sidebar">
+<!--         <ul>
+        <li ng-repeat="filter in filters">{{ filter }}</li>
+      </ul> -->
+      <h3> {{ paper.title }} </h3>
+      <h5> Authors: </h5>
+      <span ng-repeat="author in paper.authors">{{ author }}{{$last ? '' : '; '}}</span>
+      <h5> Topics: </h5>
+      <span ng-repeat="topic in paper.topics">{{ topic }}{{$last ? '' : ', '}}</span>
+      <h5> Conferences: </h5>
+      <span ng-repeat="conf in paper.conferences">{{ conf }}{{$last ? '' : ', '}}</span>
+      <h5> Link: </h5>
+      <a href="{{paper.link}}">{{ paper.link }}</a>
+
+<!--         <div class="checkbox">
+        <label>
+          <input type="checkbox" value="">
+          Option one is this and that&mdash;be sure to include why it's great
+          Topics
+        </label>
+      </div>
+      <div class="checkbox">
+        <label>
+          <input type="checkbox" value="">
+          Option two is this and that&mdash;be sure to include why it's great
+        </label>
+      </div>
+      <div class="checkbox">
+        <label>
+          <input type="checkbox" value="">
+          Option three is this and that&mdash;be sure to include why it's great
+        </label>
+      </div> -->
+    </div>
+    <div class="col-md-9" id="graph">
+<!--         <div class="direction">
+        <h2>Cited By</h2>
+      </div> -->
+      <canvas id="viewport" width="900" height="600"></canvas>
+<!--         <div class="direction>">
+        <h2>Papers Cited</h2>
+      </div> -->
+    </div>
+  </div>
+  <!-- search bar here -->
+</div>
