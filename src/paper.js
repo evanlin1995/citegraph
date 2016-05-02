@@ -16,4 +16,10 @@ var paperSchema = mongoose.Schema({
   u: [String]
 });
 
-var Paper = mongoose.model('Paper', paperSchema);
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function() {
+  
+});
+
+module.exports = mongoose.model('paper', paperSchema);

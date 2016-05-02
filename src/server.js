@@ -4,6 +4,7 @@ var fs = require('fs');
 var express = require('express');
 var app = express();
 var Paper = require('./src/paper');
+var mongoose = require('mongoose');
 
 var STATUS_OK = 200;
 
@@ -15,16 +16,19 @@ app.get('/partials/:name', (req, res) => {
   res.render(req.params.name);
 });
 
+app.get('/paper/:title', (req, res) => {
+  console.log(req.params.title);
+  var normalized_title = req.params.title.toLowerCase();
+  // Paper.findOne({ n: normalized_title }, function(err, paper) {
+  Paper.findOne({ c:  "42D7146F" }, function(err, paper) {
+    if (err) console.log(err);
+    console.log(paper);
+    res.json(STATUS_OK, paper);
+  });
+});
+
 app.get('/', (req, res) => { res.render("layout"); });
 app.get('*', (req, res) => { res.render("layout"); });
-
-app.get('/paper', (req, res) => {
-	var normalized_title = req.params.title.lower();
-	Paper.findOne({ n: normalized_title }, function(err, paper) {
-		if (err) throw error;
-		res.json(STATUS_OK, paper);
-	});
-});
 
 // var renderLayout = ;
 
