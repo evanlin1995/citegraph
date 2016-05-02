@@ -1,3 +1,6 @@
+# To Install Node Modules
+npm install
+
 # To Build and Start
 npm run site
 
