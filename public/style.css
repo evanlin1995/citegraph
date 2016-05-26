@@ -5,6 +5,10 @@ html, body {
 	overflow: hidden;
 }
 
+ol {
+	padding: 15px;
+}
+
 #background {
 	position: absolute;
 	left: 0;

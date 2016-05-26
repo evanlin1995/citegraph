@@ -6,13 +6,23 @@
       </ul> -->
       <h3> {{ paper.title }} </h3>
       <h5> Authors: </h5>
-      <span ng-repeat="author in paper.authors">{{ author }}{{$last ? '' : '; '}}</span>
+      <span ng-repeat="author in paper.authors">{{ author }}{{$last ? '' : ', '}}</span>
       <h5> Topics: </h5>
       <span ng-repeat="topic in paper.topics">{{ topic }}{{$last ? '' : ', '}}</span>
-      <h5> Conferences: </h5>
-      <span ng-repeat="conf in paper.conferences">{{ conf }}{{$last ? '' : ', '}}</span>
-      <h5> Link: </h5>
-      <a href="{{paper.link}}">{{ paper.link }}</a>
+      <div ng-show="paper.conference">
+        <h5> Conference: </h5>
+        <span>{{ paper.conference }}</span>
+      </div>
+      <h5> Links: </h5>
+      <ol>
+        <li ng-repeat="link in paper.links"><a href="{{ link }}">Link {{ $index + 1 }}</a></li>
+      </ol>
+      <div ng-show="paper.neighborsF">
+        <h3> Neighbors </h3>
+        <ol>
+          <li ng-repeat="neighbor in paper.neighborsF">{{ neighbor }}</li>
+        </ol>
+      </div>
 
 <!--         <div class="checkbox">
         <label>

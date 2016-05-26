@@ -1,9 +1,9 @@
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://13.92.95.245:27017');
 
 var paperSchema = mongoose.Schema({
+  _id: String,
   a: [String],
-  b: String,
+  b: [String],
   c: String,
   d: String,
   f: [String],
@@ -16,10 +16,8 @@ var paperSchema = mongoose.Schema({
   u: [String]
 });
 
-var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function() {
-  
-});
+// var db = mongoose.connection;
+// db.on('error', console.error.bind(console, 'connection error:'));
+// db.once('open', function() { /* what goes here */ });
 
-module.exports = mongoose.model('paper', paperSchema);
+module.exports = mongoose.model('papers', paperSchema);
