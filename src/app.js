@@ -135,13 +135,28 @@ var drawGraph = (paper) => {
       }
     };
 
+    var index = 1;
+
     for (var i = 0; i < paper.neighborsF.length; i++) {
       theUI.nodes[paper.neighborsF[i]] = {
         color: "orange",
         shape: "dot",
-        label: "    " + i + "    "
+        label: "    " + index + "    "
       };
-      theUI.edges['curPaper'][paper.neighborsF[i]] = {};
+      theUI.edges['curPaper'][paper.neighborsF[i]] = { link: "/graph/" + paper.neighborsF[i] };
+      index++;
+    }
+
+
+    for (var i = 0; i < paper.neighborsB.length; i++) {
+      theUI.nodes[paper.neighborsB[i]] = {
+        color: "blue",
+        shape: "dot",
+        label: "    " + index + "    ",
+        link: "/graph/" + paper.neighborsB[i]
+      };
+      theUI.edges['curPaper'][paper.neighborsB[i]] = {};
+      index++;
     }
 
 
@@ -150,6 +165,32 @@ var drawGraph = (paper) => {
     sys.parameters({gravity:true}); // use center-gravity to make the graph settle nicely (ymmv)
     sys.renderer = Renderer("#viewport"); // our newly created renderer will have its .init() method called shortly by sys...
     sys.graft(theUI);
+
+    // var index = 1;
+
+    // for (var i = 0; i < paper.neighborsF.length; i++) {
+    //   sys.addNode(paper.neighborsF[i], {
+    //     color: "orange",
+    //     shape: "dot",
+    //     label: "    " + index + "    ",
+    //     link: "/graph/" + paper.neighborsF[i]
+    //   });
+    //   sys.addEdge('curPaper', paper.neighborsF[i]);
+    //   index++;
+    // }
+
+
+    // for (var i = 0; i < paper.neighborsB.length; i++) {
+    //   sys.addNode(paper.neighborsB[i], {
+    //     color: "blue",
+    //     shape: "dot",
+    //     label: "    " + index + "    ",
+    //     link: "/graph/" + paper.neighborsB[i]
+    //   });
+    //   sys.addEdge('curPaper', paper.neighborsB[i]);
+    //   index++;
+    // }
+
 };
 
 

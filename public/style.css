@@ -60,6 +60,11 @@ ol {
 	height: 100%;
 }
 
+#neighbor-container {
+	height: 350px;
+	overflow: auto;
+}
+
 #graph {
 	height: 100%;
 	padding: 0;
