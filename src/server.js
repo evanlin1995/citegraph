@@ -58,13 +58,14 @@ app.get('/paper/:title', (req, res) => {
                   Paper.find({ _id: { $in: paper.f } }, function(err, neighborsF) {
                     // console.log(neighbors);
                     var result = {
+                      id: paper._id,
                       title: paper.t,
                       authors: authors.map(function (a) { return toTitleCase(a.n); }),
                       topics: keywords.map(function(a) { return a.n; }),
                       conference: paper.c,
                       links: paper.u,
-                      neighborsB: neighborsB.map(function(a) { return a.t; }),
-                      neighborsF: neighborsF.map(function(a) { return a.t; }) // change this
+                      neighborsB: neighborsB,
+                      neighborsF: neighborsF // change this
                     };
                     // var result = {
                     //   title: paper.t,

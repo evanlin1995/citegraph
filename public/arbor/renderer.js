@@ -89,7 +89,7 @@
           ctx.restore()
 
           // draw an arrowhead if this is a -> style edge
-          if (edge.data.directed){
+          // if (edge.data.directed){
             ctx.save()
               // move to the head position of the edge we just drew
               var wt = !isNaN(weight) ? parseFloat(weight) : 1
@@ -111,7 +111,7 @@
               ctx.closePath();
               ctx.fill();
             ctx.restore()
-          }
+          // }
         })
 
 
@@ -178,11 +178,12 @@
               if(move===false) {
 
                   // code for clicked node (dragged.node)
-                  var link = dragged.node.data.link
+                  var update = dragged.node.data.update
 
                   // $(that).trigger({type:"navigate", path:link})
                   // } else {
-                  if (link) window.location = link
+                  // if (link) window.location = link
+                  if (update) update();
                   // }
 
               }
