@@ -141,7 +141,8 @@ var drawGraph = (paper) => {
       theUI.nodes[paper.neighborsF[i]] = {
         color: "orange",
         shape: "dot",
-        label: "    " + index + "    "
+        label: "    " + index + "    ",
+        link: "/graph/" + paper.neighborsF[i]
       };
       theUI.edges['curPaper'][paper.neighborsF[i]] = { link: "/graph/" + paper.neighborsF[i] };
       index++;
