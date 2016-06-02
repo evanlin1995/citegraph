@@ -9,8 +9,10 @@ var Paper = require('./src/paper');
 var Keyword = require('./src/keywords');
 var Author = require('./src/authors');
 var mongoose = require('mongoose');
+var textSearch = require('mongoose-text-search');
+var keywordsJSON = require("./public/keywords.json");
 
-mongoose.connect('mongodb://40.76.12.31:27017/cv');
+mongoose.connect('mongodb://104.45.151.138:27017/cv');
 
 var STATUS_OK = 200;
 
@@ -26,6 +28,58 @@ app.use("/public", express.static(__dirname + '/public'));
 
 app.get('/partials/:name', function (req, res) {
   res.render(req.params.name);
+});
+
+app.get('/test/:query', function (req, res) {
+
+  var normalized_title = req.params.query.toLowerCase();
+  console.log(normalized_title);
+
+  // find the list of papers, return as response
+  // Paper.find({ n:  })
+  // res.status(STATUS_OK).s
+
+  Paper.find({ $text: { $search: normalized_title } }, { _id: 1, t: 1, a: 1, score: { $meta: 'textScore' } }).sort({ score: { $meta: 'textScore' } }).limit(10).exec(function (err, papers) {
+    if (err) console.log('we done goofed');
+    // also query authors
+    console.log(papers);
+    // res.status(STATUS_OK).json(papers);
+    res.status(STATUS_OK).json(papers);
+  });
+
+  // Paper.find(
+  //   { $text: { $search: normalized_title } }, function(err, papers) {
+
+  //     console.log(papers);
+  //     res.status(STATUS_OK).json(papers);
+  //   }
+  // );
+});
+
+app.get('/keywords', function (req, res) {
+  // Keyword.find({}, '_id n', function(err, keywords) {
+
+  //   console.log(keywords);
+  //   var result = {};
+  //   var size = keywords.length;
+  //   for (var i = 0; i < size; i++) {
+  //     var id = keywords[i]._id;
+  //     var name = keywords[i].n;
+  //     result[id] = name;
+  //   }
+  //   res.status(STATUS_OK).json(result);
+
+  // var count = 0;
+  // for (var key in keywordsJSON) {
+  //   if (keywordsJSON.hasOwnProperty(key)) {
+  //     count++;
+  //   }
+  // }
+  // console.log(count);
+
+  // });
+
+  res.status(STATUS_OK).json(keywordsJSON);
 });
 
 app.get('/paper/:title', function (req, res) {
@@ -59,37 +113,23 @@ app.get('/paper/:title', function (req, res) {
                       authors: authors.map(function (a) {
                         return toTitleCase(a.n);
                       }),
-                      topics: keywords.map(function (a) {
-                        return a.n;
-                      }),
+                      topics: keywords,
                       conference: paper.c,
                       links: paper.u,
                       neighborsB: neighborsB,
                       neighborsF: neighborsF // change this
                     };
-                    // var result = {
-                    //   title: paper.t,
-                    //   authors: paper.a,
-                    //   topics: keywords.map(function(a) { return a.n; }),
-                    //   conference: paper.c,
-                    //   links: paper.u,
-                    //   neighborsF: paper.f,
-                    //   neighborsB: [] // change this
-                    // };
+
                     console.log(result);
 
                     res.status(STATUS_OK).json(result);
                   });
                 }
               });
-
-              // console.log(keywords);
             }
           });
         }
       });
-
-      // res.send("hello world");
     }
   });
 });

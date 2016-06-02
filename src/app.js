@@ -1,5 +1,4 @@
 var app = angular.module('citegraph', ['ngRoute']);
-var currentPaper;
 
 app.config(['$routeProvider', '$locationProvider', ($routeProvider, $locationProvider) => {
   $locationProvider.html5Mode(true);
@@ -23,54 +22,91 @@ app.controller('SearchController', ['$scope', '$location', ($scope, $location) =
 }]);
 
 app.controller('GraphController', ['$scope', '$http', '$routeParams', ($scope, $http, $routeParams) => {
-  $scope.filters = [ 'Topic', 'Size' ];
 
-  // $scope.paper = {
-  //   title: 'Sample Paper',
-  //   authors: ['Xue, Alfred', 'Man, Colin', 'Yee, Spencer'],
-  //   topics: ['Computer Vision', 'Natural Language Processing', 'Machine Learning'],
-  //   conference: ['CS 194 Spring Fair'],
-  //   link: 'http://www.google.com/pdf'
-  // };
+  $scope.keywords = {};
+
+  $http.get('/keywords').success((res) => {
+    $scope.keywords = res;
+  });
+
+  $scope.filters = [];
+
+  $scope.getDomain = function(link) {
+    return link.replace('http://','').replace('https://','').split(/[/?#]/)[0];
+  }
+
   var query = $routeParams.query;
-
-  // $http({
-  //   method: 'GET',
-  //   url: '/paper',
-  //   params: { title: query }
-  // }).then ((res) => {
-  //   console.log(JSON.stringify(res));
-  //   currentPaper = res;
-  // }, (res) => {
-  //   //some error
-  //   alert('error');
-  // });
 
   $http.get('/paper/' + query).success((res) => {
     $scope.paper = res;
-    drawGraph($scope.paper);
+
+    // add filters
+    // for (var i = 0; i < $scope.paper.topics.length; i++) {
+    //   $scope.filters[$scope.paper.topics[i]._id] = {
+    //     name: $scope.paper.topics[i].n,
+    //     value: true
+    //   }
+    // }
+
+    
+
+    var backNeighbors = $scope.paper.neighborsB;
+    var backSize = backNeighbors.length;
+    for (var i = 0; i < backSize; i++) {
+      var numTopics = backNeighbors[i].k.length;
+      for (var j = 0; j < numTopics; j++) {
+        var curTopic = backNeighbors[i].k[j];
+        var index = search($scope.filters, curTopic);
+        if (index != -1)
+          $scope.filters[index].count++;
+        else $scope.filters.push(
+          { id: curTopic, count: 1, value: true }
+        );
+      }
+    }
+
+    var frontNeighbors = $scope.paper.neighborsF;
+    var frontSize = frontNeighbors.length;
+    for (var i = 0; i < frontSize; i++) {
+      var numTopics = frontNeighbors[i].k.length;
+      for (var j = 0; j < numTopics; j++) {
+        var curTopic = frontNeighbors[i].k[j];
+        var index = search($scope.filters, curTopic);
+        if (index != -1)
+          $scope.filters[index].count++;
+        else $scope.filters.push(
+          { id: curTopic, count: 1, value: true }
+        );
+      }
+    }
+
+    // take the top n results
+    $scope.filters.sort(function(t1, t2) {
+      return t2.count - t1.count;
+    });
+    $scope.filters.length = 6;
+
+    drawGraph($scope);
   });
-
-  // $scope.paper = {
-  //   title: 'Multipath Rejection Through Spatial Processing',
-  //   authors: ['Allison Brown'],
-  //   topics: ['Digital Signal Processing'],
-  //   conference: '',
-  //   links: ["http://www.navsys.com/Papers/0009003.pdf"],
-  //   neighborsF: [
-  //     { title: 'Neural Networks Based Approach for Data Fusion in Multi-frequency Navigation Receivers', author: 'Alison Brown' },
-  //     { title: 'Paper Two', author: 'Author Two' },
-  //     { title: 'Paper Three', author: 'Author Three' },
-  //     { title: 'Paper Four', author: 'Author Four' }
-
-  //   ],
-  //   neighborsB: []
-  // }
 
 }]);
 
+function search(myArray, nameKey){
+  for (var i = 0; i < myArray.length; i++) {
+    if (myArray[i].id === nameKey) {
+      return i;
+    }
+  }
+  return -1;
+}
 
-var drawGraph = (paper) => {
+var updateGraph = (id) => {
+  alert(JSON.stringify(id));
+
+} 
+
+
+var drawGraph = ($scope) => {
     var CLR = {
       branch:"#b2b19d",
       code:"orange",
@@ -122,6 +158,7 @@ var drawGraph = (paper) => {
     //   }
     // };
 
+    var paper = $scope.paper;
     var curID = paper.id;
     
     var theUI = {
@@ -145,13 +182,7 @@ var drawGraph = (paper) => {
         shape: "dot",
         label: "    " + index + "    ",
         // link: "/graph/" + paper.neighborsF[i]
-        update: function() {
-
-          alert(JSON.stringify(theUI));
-
-
-
-        }
+        update: updateGraph
       };
       var backNeighbors = paper.neighborsF[i].b;
       for (var j = 0; j < backNeighbors.length; j++) {
@@ -185,14 +216,7 @@ var drawGraph = (paper) => {
         shape: "dot",
         label: "    " + index + "    ",
         // link: "/graph/" + paper.neighborsB[i]
-        update: function() {
-
-
-          alert(JSON.stringify(theUI));
-
-
-
-        }
+        update: updateGraph
       };
       var backNeighbors = paper.neighborsB[i].b;
       for (var j = 0; j < backNeighbors.length; j++) {

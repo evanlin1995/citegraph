@@ -183,7 +183,7 @@
                   // $(that).trigger({type:"navigate", path:link})
                   // } else {
                   // if (link) window.location = link
-                  if (update) update();
+                  if (update) update(dragged.node);
                   // }
 
               }

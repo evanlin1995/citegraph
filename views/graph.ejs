@@ -7,15 +7,18 @@
       <h3> {{ paper.title }} </h3>
       <h5> Authors: </h5>
       <span ng-repeat="author in paper.authors">{{ author }}{{$last ? '' : ', '}}</span>
-      <h5> Topics: </h5>
-      <span ng-repeat="topic in paper.topics">{{ topic }}{{$last ? '' : ', '}}</span>
+      <h5> Filter by Topic: </h5>
+      <!-- <span ng-repeat="topic in paper.topics">{{ topic }}{{$last ? '' : ', '}}</span> -->
+      <div class="checkbox" ng-repeat="topic in filters">
+        <label><input type="checkbox" value="" ng-model="topic.value">{{ keywords[topic.id] }}</label>
+      </div>
       <div ng-show="paper.conference">
         <h5> Conference: </h5>
         <span>{{ paper.conference }}</span>
       </div>
       <h5> Links: </h5>
       <ol>
-        <li ng-repeat="link in paper.links"><a href="{{ link }}">Link {{ $index + 1 }}</a></li>
+        <li ng-repeat="link in paper.links"><a href="{{ link }}" target="_blank">{{ getDomain(link) }}</a></li>
       </ol>
       <div ng-show="paper.neighborsF">
         <h3> Neighbors </h3>
