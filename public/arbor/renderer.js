@@ -182,12 +182,13 @@
               if(move===false) {
 
                   // code for clicked node (dragged.node)
-                  var update = dragged.node.data.update
+                  var link = dragged.node.data.link
+                  if (link) window.location = link
+                  // var update = dragged.node.data.update
 
                   // $(that).trigger({type:"navigate", path:link})
                   // } else {
-                  // if (link) window.location = link
-                  if (update) update(dragged.node);
+                  // if (update) update(dragged.node);
                   // }
 
               }

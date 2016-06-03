@@ -228,7 +228,7 @@ var drawGraph = ($scope) => {
         keywords: paper.neighborsF[i].k,
         show: true,
         center: false,
-        // link: "/graph/" + paper.neighborsF[i]
+        link: "/graph/" + paper.neighborsF[i]._id,
         update: updateGraph
       };
       var backNeighbors = paper.neighborsF[i].b;
@@ -265,7 +265,7 @@ var drawGraph = ($scope) => {
         keywords: paper.neighborsB[i].k,
         show: true,
         center: false,
-        // link: "/graph/" + paper.neighborsB[i]
+        link: "/graph/" + paper.neighborsB[i]._id,
         update: updateGraph
       };
       var backNeighbors = paper.neighborsB[i].b;
