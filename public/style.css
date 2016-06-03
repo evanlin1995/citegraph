@@ -22,7 +22,11 @@ ol {
 	margin-bottom: 20px;
 }
 
-.form-group {
+.form-group-sm {
+	width: 75%;
+}
+
+.form-group-lg {
 	width: 100%;
 	/*height: 50px;*/
 }
@@ -34,6 +38,17 @@ ol {
 
 .results {
 	background: white;
+}
+
+.results ul {
+	padding: 0;
+}
+
+.results ul li {
+	list-style-type: none;
+	padding: 0;
+	font-size: 20px;
+	margin: 15px 0 15px 0;
 }
 
 .form-group button {

@@ -12,13 +12,43 @@ app.config(['$routeProvider', '$locationProvider', ($routeProvider, $locationPro
     .otherwise({ redirectTo: "/search" });
 }]);
 
-app.controller('SearchController', ['$scope', '$location', ($scope, $location) => {
+app.controller('SearchController', ['$scope', '$http', '$location', ($scope, $http, $location) => {
+  $scope.query = '';
+  $scope.results = [];
+  $scope.currentResults = [];
+  $scope.showResults = false;
+  $scope.index = 0;
+  $scope.numResults = 0;
   $scope.search = (query) => {
-    $scope.query = '';
-    $location.url('/graph/' + query);
-    // $scope.paper = $scope.samplePaper;
-    // $scope.showGraph = true;
+    $http.get('/findpaper/' + $scope.query).success((res) => {
+      $scope.showResults = true;
+      $scope.results = res;     
+      $scope.numResults = $scope.results.length;
+      $scope.currentResults = [];
+      
+      for (var i = 0; i < 10 && i < $scope.numResults; i++) {
+        $scope.currentResults.push($scope.results[i]);
+      }
+    });    
   };
+
+  $scope.next = function() {
+    $scope.currentResults = [];
+    $scope.index += 10;
+    for (var i = $scope.index; i < $scope.index + 10 && i < $scope.numResults; i++) {
+      $scope.currentResults.push($scope.results[i]);
+    }
+  }
+
+  $scope.prev = function() {
+    $scope.currentResults = [];
+    $scope.index -= 10;
+    for (var i = $scope.index; i < $scope.index + 10 && i < $scope.numResults; i++) {
+      $scope.currentResults.push($scope.results[i]);
+    }
+  }
+ 
+
 }]);
 
 app.controller('GraphController', ['$scope', '$http', '$routeParams', ($scope, $http, $routeParams) => {
@@ -64,6 +94,7 @@ app.controller('GraphController', ['$scope', '$http', '$routeParams', ($scope, $
         }
       });
       $scope.sys.eachEdge(function (edge, pt1, pt2) {
+        if (edge.source.data.center && edge.target.data.center) return;
         if (nodeIDs.indexOf(edge.source._id) != -1 || nodeIDs.indexOf(edge.target._id) != -1)
           edge.data.show = false;
         else edge.data.show = true;
@@ -76,14 +107,6 @@ app.controller('GraphController', ['$scope', '$http', '$routeParams', ($scope, $
 
   $http.get('/paper/' + query).success((res) => {
     $scope.paper = res;
-
-    // add filters
-    // for (var i = 0; i < $scope.paper.topics.length; i++) {
-    //   $scope.filters[$scope.paper.topics[i]._id] = {
-    //     name: $scope.paper.topics[i].n,
-    //     value: true
-    //   }
-    // }
 
     var backNeighbors = $scope.paper.neighborsB;
     var backSize = backNeighbors.length;
@@ -143,8 +166,6 @@ function displayNode(keywords, filters) {
 
     for (var j = 0; j < numFilters; j++) {
       if (filters[j].value && keywords[i] == filters[j].id) {
-        // console.log(keywords[i]);
-        // console.log(filters[j].id);
         return true;
       }
     }
@@ -186,7 +207,16 @@ var drawGraph = ($scope) => {
       center: true
     };
 
+    $scope.theUI.nodes['dummyNode'] = {
+      color: 'white',
+      shape: 'dot',
+      show: true,
+      center: true
+    }
+
+
     $scope.theUI.edges[curID] = {};
+    $scope.theUI.edges[curID]['dummyNode'] = { color: 'white', show: true };
 
     var index = 1;
 
@@ -257,7 +287,6 @@ var drawGraph = ($scope) => {
           $scope.theUI['edges'][frontNeighbors[j]][paper.neighborsB[i]._id] = { show: true };
         }
       }
-      // theUI.edges['curPaper'][paper.neighborsB[i]._id] = {};
       index++;
     }
 
@@ -267,30 +296,5 @@ var drawGraph = ($scope) => {
     $scope.sys.parameters({gravity:true, dt:0.015}); // use center-gravity to make the graph settle nicely (ymmv)
     $scope.sys.renderer = Renderer("#viewport"); // our newly created renderer will have its .init() method called shortly by sys...
     $scope.sys.graft($scope.theUI);
-
-    // var index = 1;
-
-    // for (var i = 0; i < paper.neighborsF.length; i++) {
-    //   sys.addNode(paper.neighborsF[i], {
-    //     color: "orange",
-    //     shape: "dot",
-    //     label: "    " + index + "    ",
-    //     link: "/graph/" + paper.neighborsF[i]
-    //   });
-    //   sys.addEdge('curPaper', paper.neighborsF[i]);
-    //   index++;
-    // }
-
-
-    // for (var i = 0; i < paper.neighborsB.length; i++) {
-    //   sys.addNode(paper.neighborsB[i], {
-    //     color: "blue",
-    //     shape: "dot",
-    //     label: "    " + index + "    ",
-    //     link: "/graph/" + paper.neighborsB[i]
-    //   });
-    //   sys.addEdge('curPaper', paper.neighborsB[i]);
-    //   index++;
-    // }
 
 };

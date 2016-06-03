@@ -3,15 +3,47 @@
 <!--     <div class="row" ng-hide="query">
     <div class="col-md-12" style="height: 225px"></div>
   </div> -->
-  <div class="row">
+<!--   <div class="row header" ng-show="showResults">
+    <div class="col-md-12"><h4>CiteGraph</h4></div>
+  </div> -->
+  <nav class="navbar navbar-default" ng-show="showResults">
+    <div class="container-fluid">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <div class="navbar-brand" href="#">CiteGraph</div>
+      </div>
+
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+        </ul>
+        <form class="form-inline">
+          <div class="form-group-sm">
+            <input type="text" ng-model="query" class="form-control" placeholder="Enter query here">
+            <button type="submit" class="btn btn-default" ng-click="search(query)">Find a paper!</button>
+          </div>
+        </form>  
+
+      </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+  </nav>
+
+
+  <div class="row" ng-hide="showResults">
     <div class="col-md-12" style="height: 225px"></div>
   </div>
-  <div class="row">
+  <div class="row" ng-hide="showResults">
     <div class="col-md-2"></div>
     <div class="col-md-8">
       <h1 id="logo" class="text-center">CiteGraph</h1>
       <form class="form-inline">
-        <div class="form-group">
+        <div class="form-group-lg">
           <input type="text" ng-model="query" class="form-control input-lg search" placeholder="Enter query here">
           <button type="submit" class="btn btn-default btn-lg" ng-click="search(query)">Find a paper!</button>
         </div>
@@ -19,16 +51,23 @@
     </div>
     <div class="col-md-2"></div>
   </div>
-<!--     <div class="row" ng-show="query">
-    <div class="col md-4"></div>
-    <div class="col-md-4 results">
+  <div class="row" ng-show="showResults">
+    <div class="col-md-12">{{ numResults }} results, showing {{index + 1}}-{{index+10}}</div>
+  </div>
+  <div class="row" ng-show="showResults">
+    <!-- <div class="col-md-1"></div> -->
+    <div class="col-md-12 results">
       <ul>
-        <li>hi</li>
-        <li>some result here</li>
+        <li ng-repeat="result in currentResults"><a href="/graph/{{ result._id }}">{{ result.t }}</a></li>
       </ul>
     </div>
-    <div class="col md-4"></div>
-  </div> -->
+    <!-- <div class="col-md-1"></div> -->
+  </div>
+  <div class="row">
+    <div class="col-md-1"><a href="#" ng-show="index>0" ng-click="prev()">Previous</a></div>
+    <div class="col-md-10"></div>
+    <div class="col-md-1"><a href="#" ng-show="index+10<numResults" ng-click="next()">Next</a></div>
+  </div>
 </div>
 
 <footer class="footer">
