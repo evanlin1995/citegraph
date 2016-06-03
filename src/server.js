@@ -10,7 +10,7 @@ var mongoose = require('mongoose');
 var textSearch = require('mongoose-text-search');
 var keywordsJSON = require("./public/keywords.json")
 
-mongoose.connect('mongodb://104.45.151.138:27017/cv');
+mongoose.connect('mongodb://40.121.138.250:27017/cv');
 
 
 var STATUS_OK = 200;
@@ -110,7 +110,6 @@ app.get('/paper/:title', (req, res) => {
 
             if (err) console.log(err);
             else {
-
 
               Paper.find({ _id: { $in: paper.b } }, function(err, neighborsB) {
 

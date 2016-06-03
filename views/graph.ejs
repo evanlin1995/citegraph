@@ -10,7 +10,7 @@
       <h5> Filter by Topic: </h5>
       <!-- <span ng-repeat="topic in paper.topics">{{ topic }}{{$last ? '' : ', '}}</span> -->
       <div class="checkbox" ng-repeat="topic in filters">
-        <label><input type="checkbox" value="" ng-model="topic.value">{{ keywords[topic.id] }}</label>
+        <label><input type="checkbox" value="" ng-model="topic.value" ng-change="updateNodes(topic)">{{ keywords[topic.id] }}</label>
       </div>
       <div ng-show="paper.conference">
         <h5> Conference: </h5>

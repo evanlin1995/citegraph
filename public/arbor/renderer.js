@@ -26,6 +26,8 @@
           // node: {mass:#, p:{x,y}, name:"", data:{}}
           // pt:   {x:#, y:#}  node position in screen coords
 
+          if (!node.data.show) return;
+
           // determine the box size and round off the coords if we'll be 
           // drawing a text label (awful alignment jitter otherwise...)
           var label = node.data.label||""
@@ -67,6 +69,8 @@
           // edge: {source:Node, target:Node, length:#, data:{}}
           // pt1:  {x:#, y:#}  source position in screen coords
           // pt2:  {x:#, y:#}  target position in screen coords
+
+          if (!edge.data.show) return;
 
           var weight = edge.data.weight
           var color = edge.data.color
