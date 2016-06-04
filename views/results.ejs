@@ -1,51 +1,45 @@
 <div class="container">
 
   <nav class="navbar navbar-default">
-    <div class="container-fluid">
-      <!-- Brand and toggle get grouped for better mobile display -->
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <div class="navbar-brand" href="#">CiteGraph</div>
-      </div>
+    <div class="container-fluid results-container">
+
+      <div class="top-bar-elem top-left-logo" href="#">citegraph</div>
 
       <!-- Collect the nav links, forms, and other content for toggling -->
-      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-        <ul class="nav navbar-nav">
-        </ul>
+      <div class="top-bar-elem">
         <form class="form-inline">
-          <div class="form-group-sm mdl-textfield mdl-js-textfield">
+          <div class="form-group-sm mdl-textfield mdl-js-textfield search-bar">
             <input type="text" ng-model="query" class="mdl-textfield__input form-control search-box" placeholder="Enter query here">
             <button type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored search-button" ng-click="search(query)">Search</button>
           </div>
         </form>  
-
       </div><!-- /.navbar-collapse -->
+
     </div><!-- /.container-fluid -->
   </nav>
 
-  <div class="row">
-    <div class="col-md-12" ng-show="numResults>0">{{ numResults }} results, showing {{index + 1}}-{{Math.min(index+10,numResults)}}</div>
-    <div class="col-md-12" ng-show="numResults==0">No results</div>
-    <div class="col-md-12" ng-show="numResults==-1">Loading...</div>
-  </div>
-  <div class="row" ng-show="showResults">
-    <!-- <div class="col-md-1"></div> -->
-    <div class="col-md-12 results">
-      <ul>
-        <li ng-repeat="result in currentResults"><a href="/graph/{{ result._id }}">{{ result.t }}</a></li>
-      </ul>
+  <div class="results">
+
+    <div class="row">
+      <div class="col-md-12" ng-show="numResults>0">{{ numResults }} results, showing {{index + 1}}-{{Math.min(index+10,numResults)}}</div>
+      <div class="col-md-12" ng-show="numResults==0">No results</div>
+      <div class="col-md-12" ng-show="numResults==-1">Loading...</div>
     </div>
-    <!-- <div class="col-md-1"></div> -->
-  </div>
-  <div class="row">
-    <div class="col-md-1"><a href="#" ng-show="index>0" ng-click="prev()">Previous</a></div>
-    <div class="col-md-10"></div>
-    <div class="col-md-1"><a href="#" ng-show="index+10<numResults" ng-click="next()">Next</a></div>
-  </div>
+    <div class="row" ng-show="showResults">
+      <!-- <div class="col-md-1"></div> -->
+      <div class="col-md-12 results">
+        <ul>
+          <li ng-repeat="result in currentResults"><a href="/graph/{{ result._id }}">{{ result.t }}</a></li>
+        </ul>
+      </div>
+      <!-- <div class="col-md-1"></div> -->
+    </div>
+    <div class="row">
+      <div class="col-md-1"><a href="#" ng-show="index>0" ng-click="prev()">Previous</a></div>
+      <div class="col-md-10"></div>
+      <div class="col-md-1"><a href="#" ng-show="index+10<numResults" ng-click="next()">Next</a></div>
+    </div>
+
+  </div> <!-- end results -->
 
 </div> <!-- end container -->

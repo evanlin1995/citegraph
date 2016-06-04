@@ -23,7 +23,7 @@ ol {
 }
 
 .form-group-sm {
-	width: 75%;
+	/* width: 75%; */
 }
 
 .form-group-lg {
@@ -132,6 +132,53 @@ ol {
 .search-button {
   float: left;
 }
+
+.container {
+    width:100%;
+    padding-left:0px;
+    padding-right:0px;
+}
+
+.top-bar-elem {
+    position: relative;
+    top: 0%;
+    transform: translateY(23%);
+    padding: 0px;
+}
+
+.top-bar-elem .search-bar {
+    padding: 0px;
+    margin-left: 15px;
+    float: right;
+    width: 360px;
+}
+
+.top-bar-elem .search-box {
+    width: 250px;
+}
+
+.top-bar-elem .search-button {
+    bottom: -3px;
+    float: right;
+}
+
+.top-left-logo {
+    font-weight:100;
+    font-size:36px;
+    font-weight: 100;
+    font-size: 36px;
+    float: left;
+}
+
+.results-container {
+    height: 55px;
+    margin-top: 20px;
+}
+
+.results {
+    padding-left:18px;
+}
+
 
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
   display: none !important;
