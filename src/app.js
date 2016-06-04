@@ -12,6 +12,14 @@ app.config(['$routeProvider', '$locationProvider', ($routeProvider, $locationPro
     .otherwise({ redirectTo: "/search" });
 }]);
 
+app.run(function($rootScope, $location, $timeout) {
+    $rootScope.$on('$viewContentLoaded', function() {
+        $timeout(function() {
+            componentHandler.upgradeAllRegistered();
+        });
+    });
+});
+
 app.controller('SearchController', ['$scope', '$http', '$location', ($scope, $http, $location) => {
   $scope.Math = window.Math;
   $scope.query = '';

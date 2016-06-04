@@ -123,6 +123,14 @@ ol {
   padding-top: 15px;
 }
 
+.search-box {
+  float: left;
+  margin-right:15px;
+}
+
+.search-button {
+  float: left;
+}
 
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
   display: none !important;
