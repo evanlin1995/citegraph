@@ -126,6 +126,7 @@ ol {
 .search-box {
   float: left;
   margin-right:15px;
+  font-family:Roboto;
 }
 
 .search-button {
