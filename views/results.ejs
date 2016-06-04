@@ -9,7 +9,8 @@
       <div class="top-bar-elem">
         <form class="form-inline">
           <div class="form-group-sm mdl-textfield mdl-js-textfield search-bar">
-            <input type="text" ng-model="query" class="mdl-textfield__input form-control search-box" placeholder="Search Text">
+            <input type="text" ng-model="query" class="mdl-textfield__input form-control search-box" placeholder="Search Text" id="search">
+            <label class="mdl-textfield__label" for="search">Search</label>
             <button type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored search-button" ng-click="search(query)">Search</button>
           </div>
         </form>  
