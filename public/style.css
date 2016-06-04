@@ -2,7 +2,7 @@ html, body {
 	width: auto !important;
 	min-width: 1000px;
 	height: 100%;
-	overflow: hidden;
+	/* overflow: hidden; */
 }
 
 ol {
@@ -189,30 +189,55 @@ ol {
     font-family: Roboto;
     font-size: 17px;
     font-weight: 200;
-    background-color: rgb(232, 239, 255);
+    background-color: #ECECEC;
 }
 
 .results a {
     color: #636363;
     text-decoration: none;
-    padding: 0px;
+    padding:20px 0px 20px 18px;
     margin: 0px;
     display:block;
     height: 65px;
     vertical-align: middle;
-    padding-top:20px;
-    padding-left: 18px;
     width: 100%;
     font-weight: 300;
 }
 
 .results a:hover {
-    background-color: #EFEFEF;
+    background-color: #F2F8FF;
 }
 
 .results .result-item {
     padding: 0px;
     margin: 0px;
+}
+
+.results-bottom-bar {
+    bottom: 0px;
+    height: 50px;
+    padding-left: 17px;
+    width: 100%;
+    background-color: #ECECEC;
+}
+
+.results-bottom-bar .prev {
+    float:left;
+    font-size: 18px;
+    color: #656565;
+    font-family: Roboto;
+    font-weight: 300;
+    margin-top: 16px;
+}
+
+.results-bottom-bar .next {
+    float:right;
+    font-size: 18px;
+    color: #656565;
+    font-family: Roboto;
+    font-weight: 300;
+    margin-top: 16px;
+    margin-right: 18px;
 }
 
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {

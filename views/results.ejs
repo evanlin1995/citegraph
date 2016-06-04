@@ -34,12 +34,11 @@
       </div>
       <!-- <div class="col-md-1"></div> -->
     </div>
-    <div class="row">
-      <div class="col-md-1"><a href="#" ng-show="index>0" ng-click="prev()">Previous</a></div>
-      <div class="col-md-10"></div>
-      <div class="col-md-1"><a href="#" ng-show="index+10<numResults" ng-click="next()">Next</a></div>
-    </div>
-
   </div> <!-- end results -->
+
+  <div class="results-bottom-bar" ng-show="numResults>0">
+      <div><a href="#" class="prev" ng-disabled="index<=0" ng-click="prev()">Previous</a></div>
+      <div><a href="#" class="next" ng-disabled="index+10>=numResults" ng-click="next()">Next</a></div>    
+  </div>
 
 </div> <!-- end container -->
