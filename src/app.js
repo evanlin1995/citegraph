@@ -6,6 +6,9 @@ app.config(['$routeProvider', '$locationProvider', ($routeProvider, $locationPro
     .when("/search", {
       templateUrl: "partials/search",
       controller: "SearchController" })
+    .when("/search/:query", {
+      templateUrl: "partials/results",
+      controller: "ResultsController" })
     .when("/graph/:query", {
       templateUrl: "partials/graph",
       controller: "GraphController" })
@@ -21,26 +24,36 @@ app.run(function($rootScope, $location, $timeout) {
 });
 
 app.controller('SearchController', ['$scope', '$http', '$location', ($scope, $http, $location) => {
+  $scope.search = (query) => {
+    $location.path("/search/" + query);
+  };
+}]);
+
+app.controller('ResultsController', ['$scope', '$http', '$location', '$routeParams', ($scope, $http, $location, $routeParams) => {
   $scope.Math = window.Math;
-  $scope.query = '';
+  $scope.query = $routeParams.query;
+  console.log($scope.query);
   $scope.results = [];
   $scope.currentResults = [];
   $scope.showResults = false;
   $scope.index = 0;
-  $scope.numResults = 0;
+  $scope.numResults = -1;
+
   $scope.search = (query) => {
-    $http.get('/findpaper/' + $scope.query).success((res) => {
-      $scope.showResults = true;
-      $scope.results = res;     
-      $scope.numResults = $scope.results.length;
-      $scope.currentResults = [];
-      $scope.index = 0;
-      
-      for (var i = 0; i < 10 && i < $scope.numResults; i++) {
-        $scope.currentResults.push($scope.results[i]);
-      }
-    });    
+    $location.path("/search/" + query);
   };
+
+  $http.get('/findpaper/' + $scope.query).success((res) => {
+    $scope.showResults = true;
+    $scope.results = res;
+    $scope.numResults = $scope.results.length;
+    $scope.currentResults = [];
+    $scope.index = 0;
+
+    for (var i = 0; i < 10 && i < $scope.numResults; i++) {
+      $scope.currentResults.push($scope.results[i]);
+    }
+  });
 
   $scope.next = function() {
     $scope.currentResults = [];
@@ -48,7 +61,7 @@ app.controller('SearchController', ['$scope', '$http', '$location', ($scope, $ht
     for (var i = $scope.index; i < $scope.index + 10 && i < $scope.numResults; i++) {
       $scope.currentResults.push($scope.results[i]);
     }
-  }
+  };
 
   $scope.prev = function() {
     $scope.currentResults = [];
@@ -56,8 +69,7 @@ app.controller('SearchController', ['$scope', '$http', '$location', ($scope, $ht
     for (var i = $scope.index; i < $scope.index + 10 && i < $scope.numResults; i++) {
       $scope.currentResults.push($scope.results[i]);
     }
-  }
- 
+  };
 
 }]);
 
@@ -75,10 +87,10 @@ app.controller('GraphController', ['$scope', '$http', '$routeParams', ($scope, $
 
   $scope.getDomain = function(link) {
     return link.replace('http://','').replace('https://','').split(/[/?#]/)[0];
-  }
+  };
 
   $scope.updateNodes = function (topic) {
-    
+
     if (topic.value) $scope.numChecked++;
     else $scope.numChecked--;
 
@@ -111,7 +123,7 @@ app.controller('GraphController', ['$scope', '$http', '$routeParams', ($scope, $
       });
 
     }
-  }
+  };
 
   var query = $routeParams.query;
 
@@ -170,7 +182,7 @@ function displayNode(keywords, filters) {
 
   var size = keywords.length;
   var numFilters = filters.length;
-  
+
   var found = false;
   for (var i = 0; i < size; i++) {
 
@@ -222,12 +234,11 @@ var getScore = (s1, s2) => {
 
 }
 
-
 var drawGraph = ($scope) => {
 
     var paper = $scope.paper;
     var curID = paper.id;
-    
+
     $scope.theUI = {
       nodes: {},
       edges: {}
