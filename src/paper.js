@@ -11,7 +11,7 @@ var paperSchema = mongoose.Schema({
   k: [String],
   n: String,
   r: String,
-  s: String,
+  s: {String : Number},
   t: String,
   u: [String]
 });

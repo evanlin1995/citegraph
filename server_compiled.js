@@ -74,7 +74,8 @@ app.get('/paper/:id', function (req, res) {
                       conference: paper.c,
                       links: paper.u,
                       neighborsB: neighborsB,
-                      neighborsF: neighborsF
+                      neighborsF: neighborsF,
+                      sketch: paper.s
                     };
 
                     console.log(result);
