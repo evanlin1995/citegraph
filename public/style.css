@@ -155,6 +155,9 @@ ol {
 
 .top-bar-elem .search-box {
     width: 250px;
+    font-size: 20px;
+    font-family: Roboto;
+    font-weight: 200;
 }
 
 .top-bar-elem .search-button {
@@ -175,10 +178,40 @@ ol {
     margin-top: 20px;
 }
 
-.results {
-    padding-left:18px;
+.results .stats {
+    padding-left: 6px;
+    display: block;
+    width: 100%;
+    height: 58px;
+    padding-top: 19px;
+    font-family: Roboto;
+    font-size: 17px;
+    font-weight: 200;
+    background-color: rgb(232, 239, 255);
 }
 
+.results a {
+    color: #636363;
+    text-decoration: none;
+    padding: 0px;
+    margin: 0px;
+    display:block;
+    height: 65px;
+    vertical-align: middle;
+    padding-top:20px;
+    padding-left: 18px;
+    width: 100%;
+    font-weight: 300;
+}
+
+.results a:hover {
+    background-color: #EFEFEF;
+}
+
+.results .result-item {
+    padding: 0px;
+    margin: 0px;
+}
 
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
   display: none !important;

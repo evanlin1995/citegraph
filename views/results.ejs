@@ -1,6 +1,6 @@
 <div class="container">
 
-  <nav class="navbar navbar-default">
+  <nav class="">
     <div class="container-fluid results-container">
 
       <div class="top-bar-elem top-left-logo" href="#">citegraph</div>
@@ -20,16 +20,16 @@
 
   <div class="results">
 
-    <div class="row">
+    <div class="stats">
       <div class="col-md-12" ng-show="numResults>0">{{ numResults }} results, showing {{index + 1}}-{{Math.min(index+10,numResults)}}</div>
       <div class="col-md-12" ng-show="numResults==0">No results</div>
       <div class="col-md-12" ng-show="numResults==-1">Loading...</div>
     </div>
-    <div class="row" ng-show="showResults">
+    <div class="row">
       <!-- <div class="col-md-1"></div> -->
       <div class="col-md-12 results">
-        <ul>
-          <li ng-repeat="result in currentResults"><a href="/graph/{{ result._id }}">{{ result.t }}</a></li>
+        <ul class="mdl-list">
+          <li class="mdl-list__item result-item" ng-repeat="result in currentResults"><a href="/graph/{{ result._id }}">{{ result.t }}</a></li>
         </ul>
       </div>
       <!-- <div class="col-md-1"></div> -->

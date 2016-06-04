@@ -33,9 +33,9 @@ app.controller('ResultsController', ['$scope', '$http', '$location', '$routePara
   $scope.Math = window.Math;
   $scope.query = $routeParams.query;
   console.log($scope.query);
+
   $scope.results = [];
   $scope.currentResults = [];
-  $scope.showResults = false;
   $scope.index = 0;
   $scope.numResults = -1;
 
@@ -44,7 +44,6 @@ app.controller('ResultsController', ['$scope', '$http', '$location', '$routePara
   };
 
   $http.get('/findpaper/' + $scope.query).success((res) => {
-    $scope.showResults = true;
     $scope.results = res;
     $scope.numResults = $scope.results.length;
     $scope.currentResults = [];
