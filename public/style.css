@@ -173,6 +173,7 @@ ol {
     font-weight: 100;
     font-size: 36px;
     float: left;
+    cursor: pointer;
 }
 
 .results-container {
@@ -221,23 +222,28 @@ ol {
     background-color: #ECECEC;
 }
 
-.results-bottom-bar .prev {
-    float:left;
-    font-size: 18px;
-    color: #656565;
+.results-bottom-bar a {
     font-family: Roboto;
     font-weight: 300;
     margin-top: 16px;
+    color: #656565;
+}
+
+.results-bottom-bar a.disabled {
+    color: darkgray;
+    pointer-events: none;
+}
+
+.results-bottom-bar .prev {
+    float:left;
+    font-size: 18px;
 }
 
 .results-bottom-bar .next {
     float:right;
     font-size: 18px;
-    color: #656565;
-    font-family: Roboto;
-    font-weight: 300;
     margin-top: 16px;
-    margin-right: 18px;
+    margin-right: 30px;
 }
 
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {

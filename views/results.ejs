@@ -3,7 +3,7 @@
   <nav class="">
     <div class="container-fluid results-container">
 
-      <div class="top-bar-elem top-left-logo" href="#">citegraph</div>
+      <div class="top-bar-elem top-left-logo" onclick="window.location='/'">citegraph</div>
 
       <!-- Collect the nav links, forms, and other content for toggling -->
       <div class="top-bar-elem">
@@ -37,8 +37,8 @@
   </div> <!-- end results -->
 
   <div class="results-bottom-bar" ng-show="numResults>0">
-      <div><a href="#" class="prev" ng-disabled="index<=0" ng-click="prev()">Previous</a></div>
-      <div><a href="#" class="next" ng-disabled="index+10>=numResults" ng-click="next()">Next</a></div>    
+      <div><a href="#" class="prev" ng-class="{disabled:index<=0};" ng-click="prev()">Previous</a></div>
+      <div><a href="#" class="next" ng-class="{disbaled:index+10>=numResults};" ng-click="next()">Next</a></div>    
   </div>
 
 </div> <!-- end container -->
