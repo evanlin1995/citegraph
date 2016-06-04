@@ -52,7 +52,7 @@
     <div class="col-md-2"></div>
   </div>
   <div class="row" ng-show="showResults">
-    <div class="col-md-12">{{ numResults }} results, showing {{index + 1}}-{{index+10}}</div>
+    <div class="col-md-12">{{ numResults }} results, showing {{index + 1}}-{{Math.min(index+10,numResults)}}</div>
   </div>
   <div class="row" ng-show="showResults">
     <!-- <div class="col-md-1"></div> -->

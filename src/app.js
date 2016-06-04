@@ -13,6 +13,7 @@ app.config(['$routeProvider', '$locationProvider', ($routeProvider, $locationPro
 }]);
 
 app.controller('SearchController', ['$scope', '$http', '$location', ($scope, $http, $location) => {
+  $scope.Math = window.Math;
   $scope.query = '';
   $scope.results = [];
   $scope.currentResults = [];
@@ -25,6 +26,7 @@ app.controller('SearchController', ['$scope', '$http', '$location', ($scope, $ht
       $scope.results = res;     
       $scope.numResults = $scope.results.length;
       $scope.currentResults = [];
+      $scope.index = 0;
       
       for (var i = 0; i < 10 && i < $scope.numResults; i++) {
         $scope.currentResults.push($scope.results[i]);
