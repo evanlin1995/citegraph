@@ -182,8 +182,12 @@
               if(move===false) {
 
                   // code for clicked node (dragged.node)
-                  var link = dragged.node.data.link
-                  if (link) window.location = link
+                  alert(dragged.node.data.score);
+                  
+
+                  // var link = dragged.node.data.link
+                  // if (link) window.location = link
+
                   // var update = dragged.node.data.update
 
                   // $(that).trigger({type:"navigate", path:link})

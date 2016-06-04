@@ -209,6 +209,29 @@ var updateGraph = (id) => {
 
 }
 
+var getScore = (s1, s2) => {
+
+  var score = 0;
+  var keys = [];
+  for (var key in s1) {
+    if (s1.hasOwnProperty(key)) keys.push(key);
+  }
+
+  for (var key in s2) {
+    if (s2.hasOwnProperty(key) && keys.indexOf(key) == -1)
+      keys.push(key);
+  }
+
+  var numKeys = keys.length;
+  for (var i = 0; i < numKeys; i++) {
+    var key = keys[i];
+    if (key in s1 && key in s2)
+      score += s1[key] * s2[key];  
+  }  
+
+  return score;
+
+}
 
 var drawGraph = ($scope) => {
 
@@ -228,18 +251,23 @@ var drawGraph = ($scope) => {
       center: true
     };
 
-    $scope.theUI.nodes['dummyNode'] = {
-      color: 'white',
-      shape: 'dot',
-      show: true,
-      center: true
+    $scope.theUI.edges[curID] = {};
+
+    if (paper.neighborsF.length == 0 && paper.neighborsB.length == 0) {
+      $scope.theUI.nodes['dummyNode'] = {
+        color: 'white',
+        shape: 'dot',
+        show: true,
+        center: true
+      }
+
+      $scope.theUI.edges[curID]['dummyNode'] = { color: 'white', show: true };
+
     }
 
-
-    $scope.theUI.edges[curID] = {};
-    $scope.theUI.edges[curID]['dummyNode'] = { color: 'white', show: true };
-
     var index = 1;
+
+    var curSketch = paper.sketch;
 
     for (var i = 0; i < paper.neighborsF.length; i++) {
       $scope.theUI['nodes'][paper.neighborsF[i]._id] = {
@@ -250,7 +278,8 @@ var drawGraph = ($scope) => {
         show: true,
         center: false,
         link: "/graph/" + paper.neighborsF[i]._id,
-        update: updateGraph
+        update: updateGraph,
+        score: getScore(curSketch, paper.neighborsF[i].s)
       };
       var backNeighbors = paper.neighborsF[i].b;
       for (var j = 0; j < backNeighbors.length; j++) {
@@ -287,7 +316,8 @@ var drawGraph = ($scope) => {
         show: true,
         center: false,
         link: "/graph/" + paper.neighborsB[i]._id,
-        update: updateGraph
+        update: updateGraph,
+        score: getScore(curSketch, paper.neighborsB[i].s)
       };
       var backNeighbors = paper.neighborsB[i].b;
       for (var j = 0; j < backNeighbors.length; j++) {
@@ -313,9 +343,11 @@ var drawGraph = ($scope) => {
 
 
 
-    $scope.sys = arbor.ParticleSystem(2600, 900, 0.5); // create the system with sensible repulsion/stiffness/friction
+    $scope.sys = arbor.ParticleSystem(500, 900, 1); // create the system with sensible repulsion/stiffness/friction
     $scope.sys.parameters({gravity:true, dt:0.015}); // use center-gravity to make the graph settle nicely (ymmv)
     $scope.sys.renderer = Renderer("#viewport"); // our newly created renderer will have its .init() method called shortly by sys...
     $scope.sys.graft($scope.theUI);
+
+    // Iterate through all neighbors, store a mapping from their node ids to their scores
 
 };
