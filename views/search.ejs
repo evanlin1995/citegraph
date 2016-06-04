@@ -10,7 +10,7 @@
       <form class="form-inline">
         <div class="form-group-lg mdl-textfield mdl-js-textfield">
           <input type="text" ng-model="query" class="mdl-textfield__input input-lg search search-box" placeholder="Enter query here">
-          <button type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored search-button" ng-click="search(query)">Search</button>
+          <button type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored search-button" ng-click="search(query)" ng-disabled="!query">Search</button>
         </div>
       </form>        
     </div>

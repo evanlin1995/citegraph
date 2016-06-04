@@ -9,7 +9,7 @@
       <div class="top-bar-elem">
         <form class="form-inline">
           <div class="form-group-sm mdl-textfield mdl-js-textfield search-bar">
-            <input type="text" ng-model="query" class="mdl-textfield__input form-control search-box" placeholder="Enter query here">
+            <input type="text" ng-model="query" class="mdl-textfield__input form-control search-box" placeholder="Search Text">
             <button type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored search-button" ng-click="search(query)">Search</button>
           </div>
         </form>  
@@ -38,7 +38,7 @@
 
   <div class="results-bottom-bar" ng-show="numResults>0">
       <div><a href="#" class="prev" ng-class="{disabled:index<=0};" ng-click="prev()">Previous</a></div>
-      <div><a href="#" class="next" ng-class="{disbaled:index+10>=numResults};" ng-click="next()">Next</a></div>    
+      <div><a href="#" class="next" ng-class="{disabled:(index+10)>=numResults};" ng-click="next()">Next</a></div>    
   </div>
 
 </div> <!-- end container -->
