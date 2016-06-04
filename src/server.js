@@ -9,7 +9,7 @@ var mongoose = require('mongoose');
 var textSearch = require('mongoose-text-search');
 var keywordsJSON = require("./public/keywords.json")
 
-mongoose.connect('mongodb://40.121.138.250:27017/cv');
+mongoose.connect('mongodb://13.92.125.6:27017/cv');
 
 var STATUS_OK = 200;
 
