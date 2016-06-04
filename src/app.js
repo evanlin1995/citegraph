@@ -252,16 +252,19 @@ var drawGraph = ($scope) => {
       center: true
     };
 
-    $scope.theUI.nodes['dummyNode'] = {
-      color: 'white',
-      shape: 'dot',
-      show: true,
-      center: true
-    }
-
-
     $scope.theUI.edges[curID] = {};
-    $scope.theUI.edges[curID]['dummyNode'] = { color: 'white', show: true };
+
+    if (paper.neighborsF.length == 0 && paper.neighborsB.length == 0) {
+      $scope.theUI.nodes['dummyNode'] = {
+        color: 'white',
+        shape: 'dot',
+        show: true,
+        center: true
+      }
+
+      $scope.theUI.edges[curID]['dummyNode'] = { color: 'white', show: true };
+
+    }
 
     var index = 1;
 
@@ -341,7 +344,7 @@ var drawGraph = ($scope) => {
 
 
 
-    $scope.sys = arbor.ParticleSystem(2600, 900, 0.5); // create the system with sensible repulsion/stiffness/friction
+    $scope.sys = arbor.ParticleSystem(500, 900, 1); // create the system with sensible repulsion/stiffness/friction
     $scope.sys.parameters({gravity:true, dt:0.015}); // use center-gravity to make the graph settle nicely (ymmv)
     $scope.sys.renderer = Renderer("#viewport"); // our newly created renderer will have its .init() method called shortly by sys...
     $scope.sys.graft($scope.theUI);
