@@ -298,9 +298,9 @@ var drawGraph = ($scope, paper, neighbors) => {
 
 
   var nodeColor = "#BF1D81";
-  var fBaseColor = "#22344C";
+  var fBaseColor = "#E53822";
   var bBaseColor = "#09A8B2";
-  var secondaryBaseColor = "#000000";
+  var secondaryBaseColor = dilute("#22344C", 0, 10, 8, 1);
 
     var theUI = {
       nodes: {},
