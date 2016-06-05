@@ -296,7 +296,6 @@ var drawGraph = ($scope, paper, neighbors) => {
 
   var curID = paper.id;
   var first_total = 40;
-  var second_total = 100 - first_total;
 
   var nodeColor = "#BF1D81";
   var fBaseColor = "#E53822";
@@ -382,7 +381,7 @@ var drawGraph = ($scope, paper, neighbors) => {
           if (!(paper.neighborsF[i]._id in theUI.edges))
             theUI['edges'][paper.neighborsF[i]._id] = {};
           theUI['edges'][paper.neighborsF[i]._id][backNeighbors[j]] = { show: true };
-        } else if (b_count < 1 && second_total > 0) {
+        } else if (b_count < 1) {
           var neighbor = neighbors[backNeighbors[j]];
           curr_index = index;
           if (neighbor) {
@@ -400,7 +399,6 @@ var drawGraph = ($scope, paper, neighbors) => {
             $scope.allNeighbors.push({ _id: neighbor._id, t: neighbor.t });
             index++;
             b_count++;
-            second_total--;
 
             if (!(paper.neighborsF[i]._id in theUI.edges))
               theUI['edges'][paper.neighborsF[i]._id] = {};
@@ -420,7 +418,7 @@ var drawGraph = ($scope, paper, neighbors) => {
           if (!(frontNeighbors[j] in theUI.edges))
             theUI['edges'][frontNeighbors[j]] = {};
           theUI['edges'][frontNeighbors[j]][paper.neighborsF[i]._id] = { show: true };
-        } else if (f_count < 1 && second_total > 0) {
+        } else if (f_count < 1) {
           var neighbor = neighbors[frontNeighbors[j]];
           curr_index = index;
           if (neighbor) {
@@ -438,7 +436,6 @@ var drawGraph = ($scope, paper, neighbors) => {
             $scope.allNeighbors.push({ _id: neighbor._id, t: neighbor.t });
             index++;
             f_count++;
-            second_total--;
 
             if (!(frontNeighbors[j] in theUI.edges))
               theUI['edges'][frontNeighbors[j]] = {};
@@ -484,7 +481,7 @@ var drawGraph = ($scope, paper, neighbors) => {
           if (!(paper.neighborsB[i]._id in theUI.edges))
             theUI['edges'][paper.neighborsB[i]._id] = {};
           theUI['edges'][paper.neighborsB[i]._id][backNeighbors[j]] = { show: true };
-        } else if (b_count < 1 && second_total > 0) {
+        } else if (b_count < 1) {
           var neighbor = neighbors[backNeighbors[j]];
           curr_index = index;
           if (neighbor) {
@@ -502,7 +499,6 @@ var drawGraph = ($scope, paper, neighbors) => {
             $scope.allNeighbors.push({ _id: neighbor._id, t: neighbor.t });
             index++;
             b_count++;
-            second_total--;
 
             if (!(paper.neighborsB[i]._id in theUI.edges))
               theUI['edges'][paper.neighborsB[i]._id] = {};
@@ -521,7 +517,7 @@ var drawGraph = ($scope, paper, neighbors) => {
           if (!(frontNeighbors[j] in theUI.edges))
             theUI['edges'][frontNeighbors[j]] = {};
           theUI['edges'][frontNeighbors[j]][paper.neighborsB[i]._id] = { show: true };
-        } else if (f_count < 1 && second_total > 0) {
+        } else if (f_count < 1) {
           var neighbor = neighbors[frontNeighbors[j]];
           curr_index = index;
           if (neighbor) {
@@ -539,7 +535,6 @@ var drawGraph = ($scope, paper, neighbors) => {
             $scope.allNeighbors.push({ _id: neighbor._id, t: neighbor.t });
             index++;
             f_count++;
-            second_total--;
 
             if (!(frontNeighbors[j] in theUI.edges))
               theUI['edges'][frontNeighbors[j]] = {};
