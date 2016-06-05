@@ -153,9 +153,9 @@ app.controller('GraphController', ['$scope', '$http', '$routeParams', ($scope, $
   var query = $routeParams.query;
 
   $http.get('/paper/' + query).success((res) => {
-    $scope.paper = res.paper;
+    var paper = res.paper;
 
-    var backNeighbors = $scope.paper.neighborsB;
+    var backNeighbors = paper.neighborsB;
     var backSize = backNeighbors.length;
     for (var i = 0; i < backSize; i++) {
       var numTopics = backNeighbors[i].k.length;
@@ -170,7 +170,7 @@ app.controller('GraphController', ['$scope', '$http', '$routeParams', ($scope, $
       }
     }
 
-    var frontNeighbors = $scope.paper.neighborsF;
+    var frontNeighbors = paper.neighborsF;
     var frontSize = frontNeighbors.length;
     for (var i = 0; i < frontSize; i++) {
       var numTopics = frontNeighbors[i].k.length;
@@ -197,7 +197,7 @@ app.controller('GraphController', ['$scope', '$http', '$routeParams', ($scope, $
     }
     console.log(JSON.stringify($scope.filters));
 
-    drawGraph($scope);
+    drawGraph(paper, res.neighbors);
     $scope.loading = false;
   });
 
@@ -261,9 +261,8 @@ var getScore = (s1, s2) => {
 
 }
 
-var drawGraph = ($scope) => {
+var drawGraph = (paper, neighbors) => {
 
-    var paper = $scope.paper;
     var curID = paper.id;
 
     var theUI = {
@@ -297,6 +296,25 @@ var drawGraph = ($scope) => {
 
     var curSketch = paper.sketch;
 
+    // for (var i = 0; i < paper.neighbors.length; i++) {
+    //   theUI['nodes'][paper.neighbors[i]._id] = {
+    //     color: "yellow",
+    //     shape: "dot",
+    //     label: "    " + index + "    ",
+    //     keywords: paper.neighbors[i].k,
+    //     show: true,
+    //     center: false,
+    //     link: "/graph/" + paper.neighbors[i]._id,
+    //     update: updateGraph,
+    //     score: getScore(curSketch, paper.neighbors[i].s)
+    //   };
+    // }
+
+    console.log("what is happening");
+    console.log(paper.neighbors);
+
+
+
     for (var i = 0; i < paper.neighborsF.length; i++) {
       theUI['nodes'][paper.neighborsF[i]._id] = {
         color: "orange",
@@ -309,6 +327,7 @@ var drawGraph = ($scope) => {
         update: updateGraph,
         score: getScore(curSketch, paper.neighborsF[i].s)
       };
+
       var backNeighbors = paper.neighborsF[i].b;
       if (backNeighbors) {
         var size = backNeighbors.length;
@@ -339,7 +358,6 @@ var drawGraph = ($scope) => {
       // theUI.edges[cur][paper.neighborsF[i]._id] = {};
       index++;
     }
-
 
     for (var i = 0; i < paper.neighborsB.length; i++) {
       theUI.nodes[paper.neighborsB[i]._id] = {
