@@ -23,6 +23,22 @@ app.run(function($rootScope, $location, $timeout) {
     });
 });
 
+app.directive('onFinishRender',['$timeout', '$parse', function ($timeout, $parse) {
+    return {
+        restrict: 'A',
+        link: function (scope, element, attr) {
+            if (scope.$last === true) {
+                $timeout(function () {
+                    scope.$emit('ngRepeatFinished');
+                    if(!!attr.onFinishRender){
+                      $parse(attr.onFinishRender)(scope);
+                    }
+                });
+            }
+        }
+    };
+}]);
+  
 app.controller('SearchController', ['$scope', '$http', '$location', ($scope, $http, $location) => {
   $scope.search = (query) => {
     $location.path("/search/" + query);
@@ -73,6 +89,10 @@ app.controller('ResultsController', ['$scope', '$http', '$location', '$routePara
 }]);
 
 app.controller('GraphController', ['$scope', '$http', '$routeParams', ($scope, $http, $routeParams) => {
+
+  $scope.$on('ngRepeatFinished', function(ngRepeatFinishedEvent) {
+    componentHandler.upgradeAllRegistered();
+  });
 
   $scope.keywords = {};
 

@@ -21,10 +21,10 @@
     </div>
   </header>
   <div class="mdl-layout__drawer graph-sidebar">
-    <span class="mdl-layout-title top-left-logo" style="padding-left:10px; padding-top: 5px;" onclick="window.location='/'">citegraph</span>
+    <span class="mdl-layout-title top-left-logo" style="padding-left:20px; padding-top: 5px;" onclick="window.location='/'">citegraph</span>
     <nav class="mdl-navigation" style="padding-top:0px;">
 
-      <div class="graph-sidebar">
+      <div class="graph-sidebar-content">
 
 <!--         <ul>
         <li ng-repeat="filter in filters">{{ filter }}</li>
@@ -34,8 +34,13 @@
       <h5> Topics: </h5>
       <span ng-repeat="topic in paper.topics">{{ keywords[topic] }}{{$last ? '' : ', '}}</span>
       <h5> Filter Neighbors by Topic: </h5>
-      <div class="checkbox" ng-repeat="topic in filters">
-        <label><input type="checkbox" value="" ng-model="topic.value" ng-change="updateNodes(topic)">{{ keywords[topic.id] }}</label>
+
+      <div class="checkbox" ng-repeat="topic in filters" on-finish-render>
+        <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect">
+          <input type="checkbox" class="mdl-checkbox__input" ng-model="topic.value" ng-change="updateNodes(topic)">
+          <span class="mdl-checkbox__label">{{ keywords[topic.id] }}</span>
+        </label>
+
       </div>
 <!--       <div ng-show="paper.conference">
         <h5> Conference: </h5>
