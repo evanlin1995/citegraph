@@ -53,22 +53,22 @@ app.get('/keywords', (req, res) => {
 app.get('/paper/:id', (req, res) => {
   var id = req.params.id;
 
-  Paper.findOne({ _id: id }, function(err, paper) {
+  Paper.findOne({ _id: id }).lean().exec( (err, paper) => {
 
     if (err || !paper) console.log(err);
     else {
 
-      Author.find({ _id: { $in: paper.a } }, function(err, authors) {
+      Author.find({ _id: { $in: paper.a } }).lean().exec((err, authors) => {
 
         if (err) console.log(err);
         else {
 
-          Paper.find({ _id: { $in: paper.b } }, function(err, neighborsB) {
+          Paper.find({ _id: { $in: paper.b } }).lean().exec((err, neighborsB) => {
 
             if (err) console.log(err);
             else {
 
-              Paper.find({ _id: { $in: paper.f } }, function(err, neighborsF) {
+              Paper.find({ _id: { $in: paper.f } }).lean().exec((err, neighborsF) => {
                 var result = {
                   id: paper._id,
                   title: paper.t,
