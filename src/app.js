@@ -296,58 +296,40 @@ var drawGraph = ($scope, paper, neighbors) => {
 
   var curID = paper.id;
 
-
   var nodeColor = "#BF1D81";
   var fBaseColor = "#E53822";
   var bBaseColor = "#09A8B2";
   var secondaryBaseColor = dilute("#22344C", 0, 10, 8, 1);
 
-    var theUI = {
-      nodes: {},
-      edges: {}
-    };
+  var theUI = {
+    nodes: {},
+    edges: {}
+  };
 
-    theUI.nodes[curID] = {
-      color: nodeColor,
-      shape: "dot",
-      label: "          ",
+  theUI.nodes[curID] = {
+    color: nodeColor,
+    shape: "dot",
+    label: "          ",
+    show: true,
+    center: true
+  };
+
+  theUI.edges[curID] = {};
+
+  if (paper.neighborsF.length == 0 && paper.neighborsB.length == 0) {
+    theUI.nodes['dummyNode'] = {
+      color: 'white',
+      shape: 'dot',
       show: true,
       center: true
     };
 
-    theUI.edges[curID] = {};
+    theUI.edges[curID]['dummyNode'] = { color: 'white', show: true };
 
-    if (paper.neighborsF.length == 0 && paper.neighborsB.length == 0) {
-      theUI.nodes['dummyNode'] = {
-        color: 'white',
-        shape: 'dot',
-        show: true,
-        center: true
-      };
+  }
 
-      theUI.edges[curID]['dummyNode'] = { color: 'white', show: true };
-
-    }
-
-    var index = 1;
-    var curSketch = paper.sketch;
-
-    // for (var i = 0; i < paper.neighbors.length; i++) {
-    //   theUI['nodes'][paper.neighbors[i]._id] = {
-    //     color: "yellow",
-    //     shape: "dot",
-    //     label: "    " + index + "    ",
-    //     keywords: paper.neighbors[i].k,
-    //     show: true,
-    //     center: false,
-    //     link: "/graph/" + paper.neighbors[i]._id,
-    //     update: updateGraph,
-    //     score: getScore(curSketch, paper.neighbors[i].s)
-    //   };
-    // }
-
-
-    console.log(neighbors);
+  var index = 1;
+  var curSketch = paper.sketch;
 
   var maxFScore = -1, minFScore = Number.MAX_SAFE_INTEGER;
   paper.neighborsF.forEach(n => {
@@ -363,189 +345,185 @@ var drawGraph = ($scope, paper, neighbors) => {
     if (score < minBScore) minBScore = score;
   });
 
-    for (var i = 0; i < paper.neighborsF.length; i++) {
-      var b_count = 0;
-      var f_count = 0;
+  for (var i = 0; i < paper.neighborsF.length; i++) {
+    var b_count = 0;
+    var f_count = 0;
 
-      var curr_index = index;
-      var score = getScore(curSketch, paper.neighborsF[i].s);
-      theUI['nodes'][paper.neighborsF[i]._id] = {
-        color: dilute(fBaseColor, 0, maxFScore - minFScore, maxFScore - score, 1.3),
-        shape: "dot",
-        label: "    " + curr_index + "    ",
-        keywords: paper.neighborsF[i].k,
-        show: true,
-        center: false,
-        link: "/graph/" + paper.neighborsF[i]._id,
-        update: updateGraph,
-        score: score
-      };
-      index++;
+    var curr_index = index;
+    var score = getScore(curSketch, paper.neighborsF[i].s);
+    theUI['nodes'][paper.neighborsF[i]._id] = {
+      color: dilute(fBaseColor, 0, maxFScore - minFScore, maxFScore - score, 1.3),
+      shape: "dot",
+      label: "    " + curr_index + "    ",
+      keywords: paper.neighborsF[i].k,
+      show: true,
+      center: false,
+      link: "/graph/" + paper.neighborsF[i]._id,
+      update: updateGraph,
+      score: score
+    };
+    index++;
 
-      var backNeighbors = paper.neighborsF[i].b;
-      if (backNeighbors) {
-        var size = backNeighbors.length;
-        for (var j = 0; j < size; j++) {
-          if (backNeighbors[j] in theUI.nodes) {
+    var backNeighbors = paper.neighborsF[i].b;
+    if (backNeighbors) {
+      var size = backNeighbors.length;
+      for (var j = 0; j < size; j++) {
+        if (backNeighbors[j] in theUI.nodes) {
+          if (!(paper.neighborsF[i]._id in theUI.edges))
+            theUI['edges'][paper.neighborsF[i]._id] = {};
+          theUI['edges'][paper.neighborsF[i]._id][backNeighbors[j]] = { show: true };
+        } else if (b_count <= 1) {
+          var neighbor = neighbors[backNeighbors[j]];
+          curr_index = index;
+          if (neighbor) {
+            theUI['nodes'][neighbor._id] = {
+              color: secondaryBaseColor,
+              shape: "dot",
+              label: "    " + curr_index + "    ",
+              keywords: neighbor.k,
+              show: true,
+              center: false,
+              link: "/graph/" + neighbor._id,
+              update: updateGraph,
+              score: getScore(curSketch, neighbor.s)
+            };
+            index++;
+            b_count++;
+
             if (!(paper.neighborsF[i]._id in theUI.edges))
               theUI['edges'][paper.neighborsF[i]._id] = {};
             theUI['edges'][paper.neighborsF[i]._id][backNeighbors[j]] = { show: true };
-          } else if (b_count <= 1) {
-            var neighbor = neighbors[backNeighbors[j]];
-            curr_index = index;
-            if (neighbor) {
-              theUI['nodes'][neighbor._id] = {
-                color: secondaryBaseColor,
-                shape: "dot",
-                label: "    " + curr_index + "    ",
-                keywords: neighbor.k,
-                show: true,
-                center: false,
-                link: "/graph/" + neighbor._id,
-                update: updateGraph,
-                score: getScore(curSketch, neighbor.s)
-              };
-              index++;
-              b_count++;
-
-              if (!(paper.neighborsF[i]._id in theUI.edges))
-                theUI['edges'][paper.neighborsF[i]._id] = {};
-              theUI['edges'][paper.neighborsF[i]._id][backNeighbors[j]] = { show: true };
-            }
           }
         }
       }
+    }
 
-      var frontNeighbors = paper.neighborsF[i].f;
-      if (frontNeighbors) {
-        var size = frontNeighbors.length;
-        for (var j = 0; j < size; j++) {
-          if (frontNeighbors[j] in theUI.nodes) {
-            // alert(JSON.stringify(frontNeighbors[j]));
-            // theUI.edges[paper.neighborsF[i]._id][frontNeighbors[j]] = {};
+    var frontNeighbors = paper.neighborsF[i].f;
+    if (frontNeighbors) {
+      var size = frontNeighbors.length;
+      for (var j = 0; j < size; j++) {
+        if (frontNeighbors[j] in theUI.nodes) {
+          // alert(JSON.stringify(frontNeighbors[j]));
+          // theUI.edges[paper.neighborsF[i]._id][frontNeighbors[j]] = {};
+          if (!(frontNeighbors[j] in theUI.edges))
+            theUI['edges'][frontNeighbors[j]] = {};
+          theUI['edges'][frontNeighbors[j]][paper.neighborsF[i]._id] = { show: true };
+        } else if (f_count <= 1) {
+          var neighbor = neighbors[frontNeighbors[j]];
+          curr_index = index;
+          if (neighbor) {
+            theUI['nodes'][neighbor._id] = {
+              color: secondaryBaseColor,
+              shape: "dot",
+              label: "    " + curr_index + "    ",
+              keywords: neighbor.k,
+              show: true,
+              center: false,
+              link: "/graph/" + neighbor._id,
+              update: updateGraph,
+              score: getScore(curSketch, neighbor.s)
+            };
+            index++;
+            f_count++;
+
             if (!(frontNeighbors[j] in theUI.edges))
               theUI['edges'][frontNeighbors[j]] = {};
             theUI['edges'][frontNeighbors[j]][paper.neighborsF[i]._id] = { show: true };
-          } else if (f_count <= 1) {
-            var neighbor = neighbors[frontNeighbors[j]];
-            curr_index = index;
-            if (neighbor) {
-              theUI['nodes'][neighbor._id] = {
-                color: secondaryBaseColor,
-                shape: "dot",
-                label: "    " + curr_index + "    ",
-                keywords: neighbor.k,
-                show: true,
-                center: false,
-                link: "/graph/" + neighbor._id,
-                update: updateGraph,
-                score: getScore(curSketch, neighbor.s)
-              };
-              index++;
-              f_count++;
-
-              if (!(frontNeighbors[j] in theUI.edges))
-                theUI['edges'][frontNeighbors[j]] = {};
-              theUI['edges'][frontNeighbors[j]][paper.neighborsF[i]._id] = { show: true };
-            }
           }
         }
       }
-
-      // theUI.edges[cur][paper.neighborsF[i]._id] = {};
     }
+  }
 
-    for (var i = 0; i < paper.neighborsB.length; i++) {
-      var b_count = 0;
-      var f_count = 0;
+  for (var i = 0; i < paper.neighborsB.length; i++) {
+    var b_count = 0;
+    var f_count = 0;
 
-      var curr_index = index;
-      var score = getScore(curSketch, paper.neighborsB[i].s);
-      theUI.nodes[paper.neighborsB[i]._id] = {
-        color: dilute(bBaseColor, 0, maxBScore - minBScore, maxBScore - score, 1.3),
-        shape: "dot",
-        label: "    " + curr_index + "    ",
-        keywords: paper.neighborsB[i].k,
-        show: true,
-        center: false,
-        link: "/graph/" + paper.neighborsB[i]._id,
-        update: updateGraph,
-        score: score
-      };
-      index++;
+    var curr_index = index;
+    var score = getScore(curSketch, paper.neighborsB[i].s);
+    theUI.nodes[paper.neighborsB[i]._id] = {
+      color: dilute(bBaseColor, 0, maxBScore - minBScore, maxBScore - score, 1.3),
+      shape: "dot",
+      label: "    " + curr_index + "    ",
+      keywords: paper.neighborsB[i].k,
+      show: true,
+      center: false,
+      link: "/graph/" + paper.neighborsB[i]._id,
+      update: updateGraph,
+      score: score
+    };
+    index++;
 
-      var backNeighbors = paper.neighborsB[i].b;
-      if (backNeighbors) {
-        var size = backNeighbors.length;
-        for (var j = 0; j < size; j++) {
-          if (backNeighbors[j] in theUI.nodes) {
+    var backNeighbors = paper.neighborsB[i].b;
+    if (backNeighbors) {
+      var size = backNeighbors.length;
+      for (var j = 0; j < size; j++) {
+        if (backNeighbors[j] in theUI.nodes) {
+
+          if (!(paper.neighborsB[i]._id in theUI.edges))
+            theUI['edges'][paper.neighborsB[i]._id] = {};
+          theUI['edges'][paper.neighborsB[i]._id][backNeighbors[j]] = { show: true };
+        } else if (b_count <= 1) {
+          var neighbor = neighbors[backNeighbors[j]];
+          curr_index = index;
+          if (neighbor) {
+            theUI['nodes'][neighbor._id] = {
+              color: secondaryBaseColor,
+              shape: "dot",
+              label: "    " + curr_index + "    ",
+              keywords: neighbor.k,
+              show: true,
+              center: false,
+              link: "/graph/" + neighbor._id,
+              update: updateGraph,
+              score: getScore(curSketch, neighbor.s)
+            };
+            index++;
+            b_count++;
 
             if (!(paper.neighborsB[i]._id in theUI.edges))
               theUI['edges'][paper.neighborsB[i]._id] = {};
             theUI['edges'][paper.neighborsB[i]._id][backNeighbors[j]] = { show: true };
-          } else if (b_count <= 1) {
-            var neighbor = neighbors[backNeighbors[j]];
-            curr_index = index;
-            if (neighbor) {
-              theUI['nodes'][neighbor._id] = {
-                color: secondaryBaseColor,
-                shape: "dot",
-                label: "    " + curr_index + "    ",
-                keywords: neighbor.k,
-                show: true,
-                center: false,
-                link: "/graph/" + neighbor._id,
-                update: updateGraph,
-                score: getScore(curSketch, neighbor.s)
-              };
-              index++;
-              b_count++;
-
-              if (!(paper.neighborsB[i]._id in theUI.edges))
-                theUI['edges'][paper.neighborsB[i]._id] = {};
-              theUI['edges'][paper.neighborsB[i]._id][backNeighbors[j]] = { show: true };
-            }
-          }
-        }
-      }
-
-      var frontNeighbors = paper.neighborsB[i].f;
-      if (frontNeighbors) {
-        var size = frontNeighbors.length;
-        for (var j = 0; j < size; j++) {
-          if (frontNeighbors[j] in theUI.nodes) {
-
-            if (!(frontNeighbors[j] in theUI.edges))
-              theUI['edges'][frontNeighbors[j]] = {};
-            theUI['edges'][frontNeighbors[j]][paper.neighborsB[i]._id] = { show: true };
-          } else if (f_count <= 1) {
-            var neighbor = neighbors[frontNeighbors[j]];
-            curr_index = index;
-            if (neighbor) {
-              theUI['nodes'][neighbor._id] = {
-                color: secondaryBaseColor,
-                shape: "dot",
-                label: "    " + curr_index + "    ",
-                keywords: neighbor.k,
-                show: true,
-                center: false,
-                link: "/graph/" + neighbor._id,
-                update: updateGraph,
-                score: getScore(curSketch, neighbor.s)
-              };
-              index++;
-              f_count++;
-
-              if (!(frontNeighbors[j] in theUI.edges))
-                theUI['edges'][frontNeighbors[j]] = {};
-              theUI['edges'][frontNeighbors[j]][paper.neighborsB[i]._id] = { show: true };
-            }
           }
         }
       }
     }
 
+    var frontNeighbors = paper.neighborsB[i].f;
+    if (frontNeighbors) {
+      var size = frontNeighbors.length;
+      for (var j = 0; j < size; j++) {
+        if (frontNeighbors[j] in theUI.nodes) {
 
+          if (!(frontNeighbors[j] in theUI.edges))
+            theUI['edges'][frontNeighbors[j]] = {};
+          theUI['edges'][frontNeighbors[j]][paper.neighborsB[i]._id] = { show: true };
+        } else if (f_count <= 1) {
+          var neighbor = neighbors[frontNeighbors[j]];
+          curr_index = index;
+          if (neighbor) {
+            theUI['nodes'][neighbor._id] = {
+              color: secondaryBaseColor,
+              shape: "dot",
+              label: "    " + curr_index + "    ",
+              keywords: neighbor.k,
+              show: true,
+              center: false,
+              link: "/graph/" + neighbor._id,
+              update: updateGraph,
+              score: getScore(curSketch, neighbor.s)
+            };
+            index++;
+            f_count++;
+
+            if (!(frontNeighbors[j] in theUI.edges))
+              theUI['edges'][frontNeighbors[j]] = {};
+            theUI['edges'][frontNeighbors[j]][paper.neighborsB[i]._id] = { show: true };
+          }
+        }
+      }
+    }
+  }
 
   $scope.sys = arbor.ParticleSystem(500, 900, 1); // create the system with sensible repulsion/stiffness/friction
   $scope.sys.parameters({gravity:true, dt:0.015}); // use center-gravity to make the graph settle nicely (ymmv)
