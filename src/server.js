@@ -71,10 +71,10 @@ app.get('/paper/:id', (req, res) => {
             else {
 
               Paper.find({ _id: { $in: paper.f } }).lean().exec((err, neighborsF) => {
-                var result = {
+                var paperNode = {
                   id: paper._id,
                   title: paper.t,
-                  authors: authors.map(function (a) { return toTitleCase(a.n); }),
+                  authors: authors.map(a => { return toTitleCase(a.n); }),
                   topics: paper.k,
                   conference: paper.c,
                   links: paper.u,
@@ -82,14 +82,19 @@ app.get('/paper/:id', (req, res) => {
                   neighborsF: neighborsF,
                   sketch: paper.s
                 };
-                neighborsB.forEach((n) => { neighbors.add(n._id); });
-                neighborsF.forEach((n) => { neighbors.add(n._id); });
+
+                var neighborNodes = new Set();
+                neighborsB.forEach(n => { neighbors.add(n); });
+                neighborsF.forEach(n => { neighbors.add(n); });
+
+                // neighborNodes.forEach(n => {
+                  
+                // });
 
                 console.log(neighbors);
 
 
-
-                res.status(STATUS_OK).json(result);
+                res.status(STATUS_OK).json(paperNode);
 
               });
             }
