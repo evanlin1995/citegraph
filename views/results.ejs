@@ -24,7 +24,11 @@
     <div class="stats">
       <div class="col-md-12" ng-show="numResults>0">{{ numResults }} results, showing {{index + 1}}-{{Math.min(index+10,numResults)}}</div>
       <div class="col-md-12" ng-show="numResults==0">No results</div>
-      <div class="col-md-12" ng-show="numResults==-1">Loading...</div>
+      <div class="col-md-12" ng-show="numResults==-1">
+        <div style="margin:100px auto 0px auto; width:500px;">
+          <div id="p2" class="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
+        </div>
+      </div>
     </div>
     <div class="row">
       <!-- <div class="col-md-1"></div> -->
