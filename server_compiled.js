@@ -10,7 +10,7 @@ var Author = require('./src/authors');
 var mongoose = require('mongoose');
 var keywordsJSON = require("./public/keywords.json");
 
-mongoose.connect('mongodb://40.76.3.96:27017/cv');
+mongoose.connect('mongodb://40.121.82.254:27017/cv');
 
 var STATUS_OK = 200;
 
