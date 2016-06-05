@@ -53,6 +53,10 @@ app.get('/keywords', (req, res) => {
   res.status(STATUS_OK).json(keywordsJSON);
 });
 
+function getPaper(id) {
+  return Paper.find({ _id: { $in: id } }).lean().exec();
+}
+
 app.get('/paper/:id', (req, res) => {
   var id = req.params.id;
 
@@ -64,13 +68,12 @@ app.get('/paper/:id', (req, res) => {
     return Author.find({ _id: { $in: r.paper.a } }).lean().exec();
   }).then(authors => {
     r.authors = authors;
-    return Paper.find({ _id: { $in: r.paper.b } }).lean().exec();
+    return getPaper(r.paper.b);
   }).then(neighborsB => {
     r.neighborsB = neighborsB;
-    return Paper.find({ _id: { $in: r.paper.f } }).lean().exec();
+    return getPaper(r.paper.f);
   }).then(neighborsF => {
     r.neighborsF = neighborsF;
-    return Promise.resolve();
   }).catch(e => {
     console.log(e);
     res.status(STATUS_ERR).json({err:e});
@@ -87,12 +90,24 @@ app.get('/paper/:id', (req, res) => {
       sketch: r.paper.s
     };
 
-    var neighborNodes = new Set();
-    r.neighborsB.forEach(n => { neighborNodes.add(n); });
-    r.neighborsF.forEach(n => { neighborNodes.add(n); });
-    console.log(neighborNodes);
+    var neighborNodes = [];
+    var neighborQs = [];
 
-    res.status(STATUS_OK).json(paperNode);
+    var addToNeighbors = n => {
+      neighborQs.push(getPaper(n._id).then(p => {
+        neighborNodes.push(p);
+      }));};
+
+    r.neighborsB.forEach(addToNeighbors);
+    r.neighborsF.forEach(addToNeighbors);
+
+    Promise.all(neighborQs).then(() => {
+      var response = {
+        paper: paperNode,
+        neighbors: neighborNodes
+      };
+      res.status(STATUS_OK).json(response);
+    });
 
   });
 
