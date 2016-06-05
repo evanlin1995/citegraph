@@ -76,9 +76,6 @@ app.get('/paper/:id', (req, res) => {
     return getPaper(r.paper.f);
   }).then(neighborsF => {
     r.neighborsF = neighborsF;
-  }).catch(e => {
-    console.log(e);
-    res.status(STATUS_ERR).json({err:e});
   }).then(() => {
     var paperNode = {
       id: r.paper._id,
@@ -105,7 +102,8 @@ app.get('/paper/:id', (req, res) => {
           neighbors.forEach(s => {
             neighborNodes[s._id] = s;
           });
-      }));};
+      }));
+    };
 
     r.neighborsB.forEach(addNeighbors);
     r.neighborsF.forEach(addNeighbors);
@@ -118,6 +116,9 @@ app.get('/paper/:id', (req, res) => {
       res.status(STATUS_OK).json(response);
     });
 
+  }, e => {
+    console.log(e);
+    res.status(STATUS_ERR).json({err:e});
   });
 
 });
