@@ -456,11 +456,15 @@ var drawGraph = ($scope, paper, neighbors) => {
     }
 
     for (var i = 0; i < paper.neighborsB.length; i++) {
+      var b_count = 0;
+      var f_count = 0;
+
+      var curr_index = index;
       var score = getScore(curSketch, paper.neighborsB[i].s);
       theUI.nodes[paper.neighborsB[i]._id] = {
         color: dilute(bBaseColor, 0, maxBScore - minBScore, maxBScore - score, 1.3),
         shape: "dot",
-        label: "    " + index + "    ",
+        label: "    " + curr_index + "    ",
         keywords: paper.neighborsB[i].k,
         show: true,
         center: false,
@@ -468,6 +472,8 @@ var drawGraph = ($scope, paper, neighbors) => {
         update: updateGraph,
         score: score
       };
+      index++;
+
       var backNeighbors = paper.neighborsB[i].b;
       if (backNeighbors) {
         var size = backNeighbors.length;
@@ -477,6 +483,28 @@ var drawGraph = ($scope, paper, neighbors) => {
             if (!(paper.neighborsB[i]._id in theUI.edges))
               theUI['edges'][paper.neighborsB[i]._id] = {};
             theUI['edges'][paper.neighborsB[i]._id][backNeighbors[j]] = { show: true };
+          } else if (b_count <= 1) {
+            var neighbor = neighbors[backNeighbors[j]];
+            curr_index = index;
+            if (neighbor) {
+              theUI['nodes'][neighbor._id] = {
+                color: secondaryBaseColor,
+                shape: "dot",
+                label: "    " + curr_index + "    ",
+                keywords: neighbor.k,
+                show: true,
+                center: false,
+                link: "/graph/" + neighbor._id,
+                update: updateGraph,
+                score: getScore(curSketch, neighbor.s)
+              };
+              index++;
+              b_count++;
+
+              if (!(paper.neighborsB[i]._id in theUI.edges))
+                theUI['edges'][paper.neighborsB[i]._id] = {};
+              theUI['edges'][paper.neighborsB[i]._id][backNeighbors[j]] = { show: true };
+            }
           }
         }
       }
@@ -490,10 +518,31 @@ var drawGraph = ($scope, paper, neighbors) => {
             if (!(frontNeighbors[j] in theUI.edges))
               theUI['edges'][frontNeighbors[j]] = {};
             theUI['edges'][frontNeighbors[j]][paper.neighborsB[i]._id] = { show: true };
+          } else if (f_count <= 1) {
+            var neighbor = neighbors[frontNeighbors[j]];
+            curr_index = index;
+            if (neighbor) {
+              theUI['nodes'][neighbor._id] = {
+                color: secondaryBaseColor,
+                shape: "dot",
+                label: "    " + curr_index + "    ",
+                keywords: neighbor.k,
+                show: true,
+                center: false,
+                link: "/graph/" + neighbor._id,
+                update: updateGraph,
+                score: getScore(curSketch, neighbor.s)
+              };
+              index++;
+              f_count++;
+
+              if (!(frontNeighbors[j] in theUI.edges))
+                theUI['edges'][frontNeighbors[j]] = {};
+              theUI['edges'][frontNeighbors[j]][paper.neighborsB[i]._id] = { show: true };
+            }
           }
         }
       }
-      index++;
     }
 
 
