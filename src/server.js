@@ -90,12 +90,12 @@ app.get('/paper/:id', (req, res) => {
       sketch: r.paper.s
     };
 
-    var neighborNodes = [];
+    var neighborNodes = {};
     var neighborQs = [];
 
     var addToNeighbors = n => {
       neighborQs.push(getPaper(n._id).then(p => {
-        neighborNodes.push(p);
+        neighborNodes[n._id] = p;
       }));};
 
     r.neighborsB.forEach(addToNeighbors);

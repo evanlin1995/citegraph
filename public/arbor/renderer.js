@@ -126,12 +126,13 @@
       selected = null;
       nearest = null;
       var dragged = null;
-      var move = false;
+      var dragging = false;
 
       // set up a handler object that will initially listen for mousedowns then
       // for moves and mouseups while dragging
       var handler = {
         moved:function(e){
+          console.log("moved");
           var pos = $(canvas).offset();
           _mouseP = arbor.Point(e.pageX-pos.left, e.pageY-pos.top);
           nearest = particleSystem.nearest(_mouseP);
@@ -140,73 +141,76 @@
               return false;
           }
 
-          selected = (nearest.distance < nearest.node.data.radius) ? nearest : null
-
+          selected = (nearest.distance < nearest.node.data.radius) ? nearest : null;
+          return selected;
           // code for node that mouse is hovered on ('selected')
-
         },
         down:function(e){
+          console.log("down");
           var pos = $(canvas).offset();
-          _mouseP = arbor.Point(e.pageX-pos.left, e.pageY-pos.top)
+          _mouseP = arbor.Point(e.pageX-pos.left, e.pageY-pos.top);
           nearest = dragged = particleSystem.nearest(_mouseP);
-          move = false;
+          dragging = false;
 
           if (dragged && dragged.node !== null){
-              dragged.node.fixed = true
+            dragged.node.fixed = true;
           }
 
-          $(canvas).bind('mousemove', handler.dragged)
-          $(window).bind('mouseup', handler.dropped)
+          $(canvas).bind('mousemove', handler.dragged);
+          $(window).bind('mouseup', handler.dropped);
 
-          return false
+          return false;
         },
         dragged:function(e){
-          var old_nearest = nearest && nearest.node._id
+          console.log("dragged");
+          var old_nearest = nearest && nearest.node._id;
           var pos = $(canvas).offset();
-          var s = arbor.Point(e.pageX-pos.left, e.pageY-pos.top)
-          move = true;
+          var s = arbor.Point(e.pageX-pos.left, e.pageY-pos.top);
+          dragging = true;
 
-          if (!nearest) return
+          if (!nearest) return false;
           if (dragged !== null && dragged.node !== null){
-            var p = particleSystem.fromScreen(s)
-            dragged.node.p = p
+            var p = particleSystem.fromScreen(s);
+            dragged.node.p = p;
           }
 
-          return false
+          return false;
         },
 
         dropped:function(e){
-          var edit = $("#edit").prop('checked')
-          if (dragged===null || dragged.node===undefined) return
-          if (dragged.node !== null) {
-              if(move===false) {
+          console.log("dropped");
+          var edit = $("#edit").prop('checked');
+          console.log(dragged);
+          if (dragged===null || dragged.node===undefined) return;
+          if(dragging===false) {
 
-                  // code for clicked node (dragged.node)
-                  alert(dragged.node.data.score);
-                  
+            // code for clicked node (dragged.node)
+            alert(dragged.node.data.score);
+            
 
-                  // var link = dragged.node.data.link
-                  // if (link) window.location = link
+            // var link = dragged.node.data.link;
+            // if (link) window.location = link;
 
-                  // var update = dragged.node.data.update
+            // var update = dragged.node.data.update;
 
-                  // $(that).trigger({type:"navigate", path:link})
-                  // } else {
-                  // if (update) update(dragged.node);
-                  // }
+            // $(that).trigger({type:"navigate", path:lik});
 
-              }
-              dragged.node.fixed = false
+
+          } else {
+            // if (update) update(dragged.node);
           }
-          dragged.node.tempMass = 1000
-          dragged = null
-          selected = null
-          $(canvas).unbind('mousemove', handler.dragged)
-          $(window).unbind('mouseup', handler.dropped)
-          _mouseP = null
-          return false
+
+
+          dragged.node.fixed = false;
+          dragged.node.tempMass = 1000;
+          dragged = null;
+          selected = null;
+          $(canvas).unbind('mousemove', handler.dragged);
+          $(window).unbind('mouseup', handler.dropped);
+          _mouseP = null;
+          return false;
         }
-      }
+      };
 
       $(canvas).mousedown(handler.down);
       $(canvas).mousemove(handler.moved);
