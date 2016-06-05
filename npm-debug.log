@@ -1,37 +1,32 @@
 0 info it worked if it ends with ok
-1 verbose cli [ '/usr/local/Cellar/node/5.6.0/bin/node',
-1 verbose cli   '/usr/local/bin/npm',
-1 verbose cli   'run',
-1 verbose cli   'site' ]
-2 info using npm@3.6.0
-3 info using node@v5.6.0
+1 verbose cli [ 'node', '/usr/local/bin/npm', 'run', 'site' ]
+2 info using npm@3.9.3
+3 info using node@v0.12.4
 4 verbose run-script [ 'presite', 'site', 'postsite' ]
 5 info lifecycle citegraph@1.0.0~presite: citegraph@1.0.0
 6 silly lifecycle citegraph@1.0.0~presite: no script for presite, continuing
 7 info lifecycle citegraph@1.0.0~site: citegraph@1.0.0
 8 verbose lifecycle citegraph@1.0.0~site: unsafe-perm in lifecycle true
-9 verbose lifecycle citegraph@1.0.0~site: PATH: /usr/local/lib/node_modules/npm/bin/node-gyp-bin:/Users/colinman/colin-data/academic/cs194/citegraph/node_modules/.bin:/Users/colinman/.rvm/gems/ruby-2.0.0-p643/bin:/Users/colinman/.rvm/gems/ruby-2.0.0-p643@global/bin:/Users/colinman/.rvm/rubies/ruby-2.0.0-p643/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin:/usr/texbin:/Users/colinman/.rvm/bin:/Library/TeX/texbin
-10 verbose lifecycle citegraph@1.0.0~site: CWD: /Users/colinman/colin-data/academic/cs194/citegraph
+9 verbose lifecycle citegraph@1.0.0~site: PATH: /usr/local/lib/node_modules/npm/bin/node-gyp-bin:/Users/malinaj/Documents/2015-2016/CS 194W/citegraph/node_modules/.bin:/usr/local/bin:/Users/malinaj/.rvm/gems/ruby-2.0.0-p643/bin:/Users/malinaj/.rvm/gems/ruby-2.0.0-p643@global/bin:/Users/malinaj/.rvm/rubies/ruby-2.0.0-p643/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin:/Users/malinaj/.rvm/bin:/Users/malinaj/Library/Python/2.7/bin:/Users/malinaj/bin
+10 verbose lifecycle citegraph@1.0.0~site: CWD: /Users/malinaj/Documents/2015-2016/CS 194W/citegraph
 11 silly lifecycle citegraph@1.0.0~site: Args: [ '-c',
 11 silly lifecycle   'babel src -d lib && mv lib/server.js server_compiled.js && node server_compiled.js' ]
 12 silly lifecycle citegraph@1.0.0~site: Returned: code: 1  signal: null
 13 info lifecycle citegraph@1.0.0~site: Failed to exec site script
 14 verbose stack Error: citegraph@1.0.0 site: `babel src -d lib && mv lib/server.js server_compiled.js && node server_compiled.js`
 14 verbose stack Exit status 1
-14 verbose stack     at EventEmitter.<anonymous> (/usr/local/lib/node_modules/npm/lib/utils/lifecycle.js:232:16)
-14 verbose stack     at emitTwo (events.js:100:13)
-14 verbose stack     at EventEmitter.emit (events.js:185:7)
+14 verbose stack     at EventEmitter.<anonymous> (/usr/local/lib/node_modules/npm/lib/utils/lifecycle.js:245:16)
+14 verbose stack     at EventEmitter.emit (events.js:110:17)
 14 verbose stack     at ChildProcess.<anonymous> (/usr/local/lib/node_modules/npm/lib/utils/spawn.js:24:14)
-14 verbose stack     at emitTwo (events.js:100:13)
-14 verbose stack     at ChildProcess.emit (events.js:185:7)
-14 verbose stack     at maybeClose (internal/child_process.js:827:16)
-14 verbose stack     at Process.ChildProcess._handle.onexit (internal/child_process.js:211:5)
+14 verbose stack     at ChildProcess.emit (events.js:110:17)
+14 verbose stack     at maybeClose (child_process.js:1015:16)
+14 verbose stack     at Process.ChildProcess._handle.onexit (child_process.js:1087:5)
 15 verbose pkgid citegraph@1.0.0
-16 verbose cwd /Users/colinman/colin-data/academic/cs194/citegraph
-17 error Darwin 15.2.0
-18 error argv "/usr/local/Cellar/node/5.6.0/bin/node" "/usr/local/bin/npm" "run" "site"
-19 error node v5.6.0
-20 error npm  v3.6.0
+16 verbose cwd /Users/malinaj/Documents/2015-2016/CS 194W/citegraph
+17 error Darwin 15.4.0
+18 error argv "node" "/usr/local/bin/npm" "run" "site"
+19 error node v0.12.4
+20 error npm  v3.9.3
 21 error code ELIFECYCLE
 22 error citegraph@1.0.0 site: `babel src -d lib && mv lib/server.js server_compiled.js && node server_compiled.js`
 22 error Exit status 1

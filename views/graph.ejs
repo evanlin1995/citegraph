@@ -53,7 +53,7 @@
       </div> -->
       <h5> Links: </h5>
       <ol>
-        <li ng-repeat="link in paper.links"><a href="{{ link }}" target="_blank">{{ getDomain(link) }}</a></li>
+        <li ng-repeat="link in paper.links"><a href="{{ link }}" target="_blank">{{ truncateLink(link) }}</a></li>
       </ol>
       <div ng-show="paper.neighborsF">
         <h5> Neighbors </h5>

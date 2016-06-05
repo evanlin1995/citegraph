@@ -64,7 +64,7 @@ app.controller('ResultsController', ['$scope', '$http', '$location', '$routePara
     $scope.numResults = $scope.results.length;
     $scope.currentResults = [];
     $scope.index = 0;
-
+    
     for (var i = 0; i < 10 && i < $scope.numResults; i++) {
       $scope.currentResults.push($scope.results[i]);
     }
@@ -106,10 +106,12 @@ app.controller('GraphController', ['$scope', '$http', '$routeParams', ($scope, $
 
   $scope.numChecked = 0;
 
-  $scope.getDomain = function(link) {
-    var domain = link.replace('http://','').replace('https://','').split(/[/?#]/)[0];
-    var trimmed_link = domain.concat(link.substr(link.length - 4))
-    return trimmed_link
+  $scope.truncateLink = function(link) {
+    link = link.replace('http://','').replace('https://','');
+    var domain = link.split(/[/?#]/)[0];
+    var domain_length = domain.length;
+    var path = link.substr(domain_length);
+    return domain.concat(path.substr(0, 6)).concat("...").concat(path.substr(-5));
   };
 
   $scope.updateNodes = function (topic) {
