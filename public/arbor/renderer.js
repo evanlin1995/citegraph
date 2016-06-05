@@ -1,6 +1,7 @@
 (function(){
   
   Renderer = function(canvasName, containerName){
+    var lastNode = -1
     var canvas = $(canvasName).get(0)
     var ctx = canvas.getContext("2d");
     var gfx = arbor.Graphics(canvas)
@@ -82,7 +83,7 @@
           if (!edge.data.show) return;
 
           var weight = edge.data.weight
-          var color = edge.data.color
+          var color = (lastNode == edge.source._id || lastNode == edge.target._id) ? 'red' : edge.data.color;
 
           if (!color || (""+color).match(/^[ \t]*$/)) color = null
 
@@ -151,7 +152,9 @@
               return false;
           }
 
-          selected = (nearest.distance < nearest.node.data.radius) ? nearest : null;
+          var radius = ctx.measureText(""+nearest.node.data.label).width + 10;
+          selected = (nearest.distance < radius) ? nearest : null;
+          if (selected) lastNode = selected.node._id;
           return selected;
           // code for node that mouse is hovered on ('selected')
         },
