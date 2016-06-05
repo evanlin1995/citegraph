@@ -9,10 +9,13 @@ var Keyword = require('./src/keywords');
 var Author = require('./src/authors');
 var mongoose = require('mongoose');
 var keywordsJSON = require("./public/keywords.json");
+var Promise = require('bluebird');
 
 mongoose.connect('mongodb://40.121.82.254:27017/cv');
+mongoose.Promise = Promise;
 
 var STATUS_OK = 200;
+var STATUS_ERR = 500;
 
 function toTitleCase(str) {
   return str.replace(/\w\S*/g, function (txt) {
@@ -47,52 +50,95 @@ app.get('/keywords', function (req, res) {
 app.get('/paper/:id', function (req, res) {
   var id = req.params.id;
 
-  var neighbors = new Set();
+  // jank AF
+  var r = {};
 
-  Paper.findOne({ _id: id }).lean().exec(function (err, paper) {
+  Paper.findOne({ _id: id }).lean().exec().then(function (paper) {
+    r.paper = paper;
+    return Author.find({ _id: { $in: r.paper.a } }).lean().exec();
+  }).then(function (authors) {
+    r.authors = authors;
+    return Paper.find({ _id: { $in: r.paper.b } }).lean().exec();
+  }).then(function (neighborsB) {
+    r.neighborsB = neighborsB;
+    return Paper.find({ _id: { $in: r.paper.f } }).lean().exec();
+  }).then(function (neighborsF) {
+    r.neighborsF = neighborsF;
+    return Promise.resolve();
+  }).catch(function (e) {
+    console.log(e);
+    res.status(STATUS_ERR).json({ err: e });
+  }).then(function () {
+    var paperNode = {
+      id: r.paper._id,
+      title: r.paper.t,
+      authors: r.authors.map(function (a) {
+        return toTitleCase(a.n);
+      }),
+      topics: r.paper.k,
+      conference: r.paper.c,
+      links: r.paper.u,
+      neighborsB: r.neighborsB,
+      neighborsF: r.neighborsF,
+      sketch: r.paper.s
+    };
 
-    if (err || !paper) console.log(err);else {
+    var neighborNodes = new Set();
+    r.neighborsB.forEach(function (n) {
+      neighborNodes.add(n);
+    });
+    r.neighborsF.forEach(function (n) {
+      neighborNodes.add(n);
+    });
+    console.log(neighborNodes);
 
-      Author.find({ _id: { $in: paper.a } }).lean().exec(function (err, authors) {
-
-        if (err) console.log(err);else {
-
-          Paper.find({ _id: { $in: paper.b } }).lean().exec(function (err, neighborsB) {
-
-            if (err) console.log(err);else {
-
-              Paper.find({ _id: { $in: paper.f } }).lean().exec(function (err, neighborsF) {
-                var paperNode = {
-                  id: paper._id,
-                  title: paper.t,
-                  authors: authors.map(function (a) {
-                    return toTitleCase(a.n);
-                  }),
-                  topics: paper.k,
-                  conference: paper.c,
-                  links: paper.u,
-                  neighborsB: neighborsB,
-                  neighborsF: neighborsF,
-                  sketch: paper.s
-                };
-
-                neighborsB.forEach(function (n) {
-                  neighbors.add(n);
-                });
-                neighborsF.forEach(function (n) {
-                  neighbors.add(n);
-                });
-
-                console.log(neighbors);
-
-                res.status(STATUS_OK).json(paperNode);
-              });
-            }
-          });
-        }
-      });
-    }
+    res.status(STATUS_OK).json(paperNode);
   });
+
+  // (err, paper) => {
+
+  //    if (err || !paper) console.log(err);
+  //    else {
+
+  //      Author.find({ _id: { $in: paper.a } }).lean().exec((err, authors) => {
+
+  //        if (err) console.log(err);
+  //        else {
+
+  //          Paper.find({ _id: { $in: paper.b } }).lean().exec((err, neighborsB) => {
+
+  //            if (err) console.log(err);
+  //            else {
+
+  //              Paper.find({ _id: { $in: paper.f } }).lean().exec((err, neighborsF) => {
+  //                var paperNode = {
+  //                  id: paper._id,
+  //                  title: paper.t,
+  //                  authors: authors.map(a => { return toTitleCase(a.n); }),
+  //                  topics: paper.k,
+  //                  conference: paper.c,
+  //                  links: paper.u,
+  //                  neighborsB: neighborsB,
+  //                  neighborsF: neighborsF,
+  //                  sketch: paper.s
+  //                };
+
+  //                // neighborNodes.forEach(n => {
+
+  //                // });
+
+  //                console.log(neighbors);
+
+  //                res.status(STATUS_OK).json(paperNode);
+
+  //              });
+  //            }
+  //          });
+  //        }
+  //      });
+  //    }
+
+  //  });
 });
 
 app.get('/', function (req, res) {
