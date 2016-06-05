@@ -294,7 +294,7 @@ function dilute(color1, min, max, val, closeness) {
 
 var drawGraph = ($scope, paper, neighbors) => {
 
-    var curID = paper.id;
+  var curID = paper.id;
 
 
   var nodeColor = "#BF1D81";
