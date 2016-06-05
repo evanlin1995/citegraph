@@ -48,6 +48,7 @@ app.get('/keywords', function (req, res) {
 });
 
 function getPaper(id) {
+  if (id === undefined || id.length == 0) return Promise.resolve([]);
   return Paper.find({ _id: { $in: id } }).lean().exec();
 }
 
@@ -63,6 +64,7 @@ app.get('/paper/:id', function (req, res) {
   }).then(function (authors) {
     r.authors = authors;
     return getPaper(r.paper.b);
+    // repeated here - optimized later
   }).then(function (neighborsB) {
     r.neighborsB = neighborsB;
     return getPaper(r.paper.f);
@@ -89,14 +91,35 @@ app.get('/paper/:id', function (req, res) {
     var neighborNodes = {};
     var neighborQs = [];
 
-    var addToNeighbors = function addToNeighbors(n) {
-      neighborQs.push(getPaper(n._id).then(function (p) {
-        neighborNodes[n._id] = p;
+    var addNeighbors = function addNeighbors(n) {
+      neighborQs.push(getPaper(n.b).then(function (neighbors) {
+        neighbors.forEach(function (s) {
+          neighborNodes[s._id] = s;
+        });
+        return getPaper(n.f);
+      }).then(function (neighbors) {
+        neighbors.forEach(function (s) {
+          neighborNodes[s._id] = s;
+        });
       }));
     };
 
-    r.neighborsB.forEach(addToNeighbors);
-    r.neighborsF.forEach(addToNeighbors);
+    // var addToNeighbors = n => {
+    //   neighborQs.push(getPaper(n._id).then(p => {
+    //     getPaper(p.b).then(secondNeighbors => {
+    //       secondNeighbors.forEach(s => {
+    //         neighborNodes[s._id] = s;
+    //       });
+    //       return getPaper(p.f);
+    //     }).then(secondNeighbors => {
+    //       secondNeighbors.forEach(s => {
+    //         neighborNodes[s._id] = s;
+    //       });
+    //     });
+    //   }));};
+
+    r.neighborsB.forEach(addNeighbors);
+    r.neighborsF.forEach(addNeighbors);
 
     Promise.all(neighborQs).then(function () {
       var response = {

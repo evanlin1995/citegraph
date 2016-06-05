@@ -54,6 +54,7 @@ app.get('/keywords', (req, res) => {
 });
 
 function getPaper(id) {
+  if (id === undefined || id.length == 0) return Promise.resolve([]);
   return Paper.find({ _id: { $in: id } }).lean().exec();
 }
 
@@ -69,6 +70,7 @@ app.get('/paper/:id', (req, res) => {
   }).then(authors => {
     r.authors = authors;
     return getPaper(r.paper.b);
+    // repeated here - optimized later
   }).then(neighborsB => {
     r.neighborsB = neighborsB;
     return getPaper(r.paper.f);
@@ -93,13 +95,20 @@ app.get('/paper/:id', (req, res) => {
     var neighborNodes = {};
     var neighborQs = [];
 
-    var addToNeighbors = n => {
-      neighborQs.push(getPaper(n._id).then(p => {
-        neighborNodes[n._id] = p;
+    var addNeighbors = n => {
+      neighborQs.push(getPaper(n.b).then(neighbors => {
+          neighbors.forEach(s => {
+            neighborNodes[s._id] = s;
+          });
+          return getPaper(n.f);
+      }).then(neighbors => {
+          neighbors.forEach(s => {
+            neighborNodes[s._id] = s;
+          });
       }));};
 
-    r.neighborsB.forEach(addToNeighbors);
-    r.neighborsF.forEach(addToNeighbors);
+    r.neighborsB.forEach(addNeighbors);
+    r.neighborsF.forEach(addNeighbors);
 
     Promise.all(neighborQs).then(() => {
       var response = {
