@@ -89,7 +89,7 @@ app.controller('ResultsController', ['$scope', '$http', '$location', '$routePara
 }]);
 
 app.controller('GraphController', ['$scope', '$http', '$routeParams', ($scope, $http, $routeParams) => {
-
+  $scope.hoverNode = -1;
   $scope.hover = id => {
     $scope.hoverNode = id;
   };
@@ -312,6 +312,7 @@ var drawGraph = ($scope, paper, neighbors) => {
   };
 
   theUI.nodes[curID] = {
+    _id: curID,
     color: nodeColor,
     shape: "dot",
     label: "          ",
