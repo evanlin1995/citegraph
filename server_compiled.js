@@ -47,6 +47,8 @@ app.get('/keywords', function (req, res) {
 app.get('/paper/:id', function (req, res) {
   var id = req.params.id;
 
+  var neighbors = new Set();
+
   Paper.findOne({ _id: id }).lean().exec(function (err, paper) {
 
     if (err || !paper) console.log(err);else {
@@ -73,8 +75,14 @@ app.get('/paper/:id', function (req, res) {
                   neighborsF: neighborsF,
                   sketch: paper.s
                 };
+                neighborsB.forEach(function (n) {
+                  neighbors.add(n._id);
+                });
+                neighborsF.forEach(function (n) {
+                  neighbors.add(n._id);
+                });
 
-                console.log(result);
+                console.log(neighbors);
 
                 res.status(STATUS_OK).json(result);
               });

@@ -6,7 +6,7 @@ var Paper = require('./src/paper');
 var Keyword = require('./src/keywords');
 var Author = require('./src/authors');
 var mongoose = require('mongoose');
-var keywordsJSON = require("./public/keywords.json")
+var keywordsJSON = require("./public/keywords.json");
 
 mongoose.connect('mongodb://40.121.82.254:27017/cv');
 
@@ -53,6 +53,8 @@ app.get('/keywords', (req, res) => {
 app.get('/paper/:id', (req, res) => {
   var id = req.params.id;
 
+  var neighbors = new Set();
+
   Paper.findOne({ _id: id }).lean().exec( (err, paper) => {
 
     if (err || !paper) console.log(err);
@@ -80,17 +82,24 @@ app.get('/paper/:id', (req, res) => {
                   neighborsF: neighborsF,
                   sketch: paper.s
                 };
+                neighborsB.forEach((n) => { neighbors.add(n._id); });
+                neighborsF.forEach((n) => { neighbors.add(n._id); });
 
-                console.log(result);
+                console.log(neighbors);
+
+
 
                 res.status(STATUS_OK).json(result);
+
               });
             }
           });
         }
       });
     }
+
   });
+
 });
 
 app.get('/', (req, res) => { res.render("layout"); });
