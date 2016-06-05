@@ -7,21 +7,21 @@
           {{ paper.title }}
         </div>
       </div>
-      <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable
-                  mdl-textfield--floating-label mdl-textfield--align-right">
-        <label class="mdl-button mdl-js-button mdl-button--icon"
-               for="fixed-header-drawer-exp">
-          <i class="material-icons">search</i>
-        </label>
-        <div class="mdl-textfield__expandable-holder">
-          <input class="mdl-textfield__input" type="text" name="sample"
-                 id="fixed-header-drawer-exp">
-        </div>
-      </div>
+      <!-- <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable -->
+      <!--             mdl-textfield--floating-label mdl-textfield--align-right"> -->
+      <!--   <label class="mdl-button mdl-js-button mdl-button--icon" -->
+      <!--          for="fixed-header-drawer-exp"> -->
+      <!--     <i class="material-icons">search</i> -->
+      <!--   </label> -->
+      <!--   <div class="mdl-textfield__expandable-holder"> -->
+      <!--     <input class="mdl-textfield__input" type="text" name="sample" -->
+      <!--            id="fixed-header-drawer-exp"> -->
+      <!--   </div> -->
+      <!-- </div> -->
     </div>
   </header>
   <div class="mdl-layout__drawer graph-sidebar">
-    <span class="mdl-layout-title top-left-logo" style="padding-left:20px; padding-top: 5px;" onclick="window.location='/'">citegraph</span>
+    <span class="mdl-layout-title top-left-logo" style="padding-left:15px; padding-top: 5px;" onclick="window.location='/'">citegraph</span>
     <nav class="mdl-navigation" style="padding-top:0px;">
 
       <div class="graph-sidebar-content">
@@ -29,6 +29,11 @@
 <!--         <ul>
         <li ng-repeat="filter in filters">{{ filter }}</li>
       </ul> -->
+
+      <div ng-hide="loading">
+
+      <h5> Title: </h5>
+      {{paper.title}}
       <h5> Authors: </h5>
       <span ng-repeat="author in paper.authors">{{ author }}{{$last ? '' : ', '}}</span>
       <h5> Topics: </h5>
@@ -60,12 +65,16 @@
         </div>
       </div>
 
+      </div> <!-- end div-loading hide  -->
+
       <div/> <!-- end graph-sidebar -->
     </nav>
   </div>
   <main class="mdl-layout__content graph-content">
     <div class="page-content">
-
+      <div ng-show="loading" style="margin:100px auto 0px auto; width:500px;">
+        <div id="p2" class="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
+      </div>
       <div class="col-md-9 graph-graph" id="graph">
         <canvas id="viewport" width="900" height="600"></canvas>
       </div>

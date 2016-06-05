@@ -90,6 +90,8 @@ app.controller('ResultsController', ['$scope', '$http', '$location', '$routePara
 
 app.controller('GraphController', ['$scope', '$http', '$routeParams', ($scope, $http, $routeParams) => {
 
+  $scope.loading = true;
+
   $scope.$on('ngRepeatFinished', function(ngRepeatFinishedEvent) {
     componentHandler.upgradeAllRegistered();
   });
@@ -191,6 +193,7 @@ app.controller('GraphController', ['$scope', '$http', '$routeParams', ($scope, $
     console.log(JSON.stringify($scope.filters));
 
     drawGraph($scope);
+    $scope.loading = false;
   });
 
 }]);
