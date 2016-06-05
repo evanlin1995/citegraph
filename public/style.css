@@ -246,6 +246,42 @@ ol {
     margin-right: 30px;
 }
 
+.graph-sidebar {
+    width: 350px !important;
+}
+
+.graph-content {
+    margin-left: 350px !important;
+}
+
+.graph-graph {
+    width: 100%;
+}
+
+.graph-row {
+    padding-left: 110px !important;
+}
+
+.graph-title {
+    padding-left: 20px;
+    font-family: Roboto;
+    font-weight: 300;
+    font-size: 28px;
+}
+
+.graph-sidebar {
+    padding: 0px 25px 0px 10px;
+    font-family: Roboto;
+}
+
+.graph-sidebar a {
+    color: rgb(63, 81, 181);
+}
+
+h5 {
+    font-weight: 400;
+}
+
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
   display: none !important;
 }

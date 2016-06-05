@@ -1,10 +1,34 @@
-<div class="container container-full">
-  <div class="row row-full">
-    <div class="col-md-3" id="sidebar">
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer
+            mdl-layout--fixed-header">
+  <header class="mdl-layout__header">
+    <div class="mdl-layout__header-row graph-row">
+      <div class="mdl-layout-spacer">
+        <div class="graph-title">
+          {{ paper.title }}
+        </div>
+      </div>
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable
+                  mdl-textfield--floating-label mdl-textfield--align-right">
+        <label class="mdl-button mdl-js-button mdl-button--icon"
+               for="fixed-header-drawer-exp">
+          <i class="material-icons">search</i>
+        </label>
+        <div class="mdl-textfield__expandable-holder">
+          <input class="mdl-textfield__input" type="text" name="sample"
+                 id="fixed-header-drawer-exp">
+        </div>
+      </div>
+    </div>
+  </header>
+  <div class="mdl-layout__drawer graph-sidebar">
+    <span class="mdl-layout-title top-left-logo" style="padding-left:10px; padding-top: 5px;" onclick="window.location='/'">citegraph</span>
+    <nav class="mdl-navigation" style="padding-top:0px;">
+
+      <div class="graph-sidebar">
+
 <!--         <ul>
         <li ng-repeat="filter in filters">{{ filter }}</li>
       </ul> -->
-      <h4> {{ paper.title }} </h4>
       <h5> Authors: </h5>
       <span ng-repeat="author in paper.authors">{{ author }}{{$last ? '' : ', '}}</span>
       <h5> Topics: </h5>
@@ -31,10 +55,16 @@
         </div>
       </div>
 
-    </div>
-    <div class="col-md-9" id="graph">
-      <canvas id="viewport" width="900" height="600"></canvas>
-    </div>
+      <div/> <!-- end graph-sidebar -->
+    </nav>
   </div>
-  <!-- search bar here -->
+  <main class="mdl-layout__content graph-content">
+    <div class="page-content">
+
+      <div class="col-md-9 graph-graph" id="graph">
+        <canvas id="viewport" width="900" height="600"></canvas>
+      </div>
+
+    </div>
+  </main>
 </div>
