@@ -261,9 +261,46 @@ var getScore = (s1, s2) => {
 
 }
 
+function hexToRgb(hex) {
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+    } : null;
+}
+
+function componentToHex(c) {
+  c = Math.round(c);
+  var hex = c.toString(16);
+  return hex.length == 1 ? "0" + hex : hex;
+}
+
+function rgbToHex(r, g, b) {
+    return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+}
+
+function dilute(color1, min, max, val, closeness) {
+  if (min == max) return color1;
+  max *= closeness;                   // so it doesn't dilute all the way to white
+  var c1 = hexToRgb(color1);
+  var percentage = (val - min) / (max-min);
+  c1.r += (255 - c1.r) * percentage;
+  c1.g += (255 - c1.g) * percentage;
+  c1.b += (255 - c1.b) * percentage;
+  console.log(rgbToHex(c1.r, c1.g, c1.b));
+  return rgbToHex(c1.r, c1.g, c1.b);
+}
+
 var drawGraph = ($scope, paper, neighbors) => {
 
     var curID = paper.id;
+
+
+  var nodeColor = "#BF1D81";
+  var fBaseColor = "#22344C";
+  var bBaseColor = "#09A8B2";
+  var secondaryBaseColor = "#000000";
 
     var theUI = {
       nodes: {},
@@ -271,7 +308,7 @@ var drawGraph = ($scope, paper, neighbors) => {
     };
 
     theUI.nodes[curID] = {
-      color: "red",
+      color: nodeColor,
       shape: "dot",
       label: "          ",
       show: true,
@@ -295,13 +332,45 @@ var drawGraph = ($scope, paper, neighbors) => {
     var index = 1;
     var curSketch = paper.sketch;
 
+    // for (var i = 0; i < paper.neighbors.length; i++) {
+    //   theUI['nodes'][paper.neighbors[i]._id] = {
+    //     color: "yellow",
+    //     shape: "dot",
+    //     label: "    " + index + "    ",
+    //     keywords: paper.neighbors[i].k,
+    //     show: true,
+    //     center: false,
+    //     link: "/graph/" + paper.neighbors[i]._id,
+    //     update: updateGraph,
+    //     score: getScore(curSketch, paper.neighbors[i].s)
+    //   };
+    // }
+
+
+    console.log(neighbors);
+
+  var maxFScore = -1, minFScore = Number.MAX_SAFE_INTEGER;
+  paper.neighborsF.forEach(n => {
+    var score = getScore(curSketch, n.s);
+    if (score > maxFScore) maxFScore = score;
+    if (score < minFScore) minFScore = score;
+  });
+
+  var maxBScore = -1, minBScore = Number.MAX_SAFE_INTEGER;
+  paper.neighborsB.forEach(n => {
+    var score = getScore(curSketch, n.s);
+    if (score > maxBScore) maxBScore = score;
+    if (score < minBScore) minBScore = score;
+  });
+
     for (var i = 0; i < paper.neighborsF.length; i++) {
       var b_count = 0;
       var f_count = 0;
 
       var curr_index = index;
+      var score = getScore(curSketch, paper.neighborsF[i].s);
       theUI['nodes'][paper.neighborsF[i]._id] = {
-        color: "orange",
+        color: dilute(fBaseColor, 0, maxFScore - minFScore, maxFScore - score, 1.3),
         shape: "dot",
         label: "    " + curr_index + "    ",
         keywords: paper.neighborsF[i].k,
@@ -309,7 +378,7 @@ var drawGraph = ($scope, paper, neighbors) => {
         center: false,
         link: "/graph/" + paper.neighborsF[i]._id,
         update: updateGraph,
-        score: getScore(curSketch, paper.neighborsF[i].s)
+        score: score
       };
       index++;
 
@@ -326,7 +395,7 @@ var drawGraph = ($scope, paper, neighbors) => {
             curr_index = index;
             if (neighbor) {
               theUI['nodes'][neighbor._id] = {
-                color: "green",
+                color: secondaryBaseColor,
                 shape: "dot",
                 label: "    " + curr_index + "    ",
                 keywords: neighbor.k,
@@ -362,7 +431,7 @@ var drawGraph = ($scope, paper, neighbors) => {
             curr_index = index;
             if (neighbor) {
               theUI['nodes'][neighbor._id] = {
-                color: "green",
+                color: secondaryBaseColor,
                 shape: "dot",
                 label: "    " + curr_index + "    ",
                 keywords: neighbor.k,
@@ -387,8 +456,9 @@ var drawGraph = ($scope, paper, neighbors) => {
     }
 
     for (var i = 0; i < paper.neighborsB.length; i++) {
+      var score = getScore(curSketch, paper.neighborsB[i].s);
       theUI.nodes[paper.neighborsB[i]._id] = {
-        color: "blue",
+        color: dilute(bBaseColor, 0, maxBScore - minBScore, maxBScore - score, 1.3),
         shape: "dot",
         label: "    " + index + "    ",
         keywords: paper.neighborsB[i].k,
@@ -396,7 +466,7 @@ var drawGraph = ($scope, paper, neighbors) => {
         center: false,
         link: "/graph/" + paper.neighborsB[i]._id,
         update: updateGraph,
-        score: getScore(curSketch, paper.neighborsB[i].s)
+        score: score
       };
       var backNeighbors = paper.neighborsB[i].b;
       if (backNeighbors) {
@@ -428,10 +498,11 @@ var drawGraph = ($scope, paper, neighbors) => {
 
 
 
-    $scope.sys = arbor.ParticleSystem(500, 900, 1); // create the system with sensible repulsion/stiffness/friction
-    $scope.sys.parameters({gravity:true, dt:0.015}); // use center-gravity to make the graph settle nicely (ymmv)
-    $scope.sys.renderer = Renderer("#viewport"); // our newly created renderer will have its .init() method called shortly by sys...
-    $scope.sys.graft(theUI);
+  $scope.sys = arbor.ParticleSystem(500, 900, 1); // create the system with sensible repulsion/stiffness/friction
+  $scope.sys.parameters({gravity:true, dt:0.015}); // use center-gravity to make the graph settle nicely (ymmv)
+  $scope.sys.fps(20);
+  $scope.sys.renderer = Renderer("#viewport", "#graph"); // our newly created renderer will have its .init() method called shortly by sys...
+  $scope.sys.graft(theUI);
 
     // Iterate through all neighbors, store a mapping from their node ids to their scores
 

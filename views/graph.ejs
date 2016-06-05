@@ -70,13 +70,13 @@
       <div/> <!-- end graph-sidebar -->
     </nav>
   </div>
-  <main class="mdl-layout__content graph-content">
-    <div class="page-content">
+  <main class="mdl-layout__content graph-content" style="height: calc(100% - 64px);">
+    <div class="page-content" style="height:100%;">
       <div ng-show="loading" style="margin:100px auto 0px auto; width:500px;">
         <div id="p2" class="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
       </div>
       <div class="col-md-9 graph-graph" id="graph">
-        <canvas id="viewport" width="900" height="600"></canvas>
+        <canvas id="viewport"></canvas>
       </div>
 
     </div>

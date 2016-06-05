@@ -70,9 +70,6 @@ app.get('/paper/:id', function (req, res) {
     return getPaper(r.paper.f);
   }).then(function (neighborsF) {
     r.neighborsF = neighborsF;
-  }).catch(function (e) {
-    console.log(e);
-    res.status(STATUS_ERR).json({ err: e });
   }).then(function () {
     var paperNode = {
       id: r.paper._id,
@@ -114,6 +111,9 @@ app.get('/paper/:id', function (req, res) {
       };
       res.status(STATUS_OK).json(response);
     });
+  }, function (e) {
+    console.log(e);
+    res.status(STATUS_ERR).json({ err: e });
   });
 });
 
