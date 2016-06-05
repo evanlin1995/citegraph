@@ -7,8 +7,9 @@
       <h4> {{ paper.title }} </h4>
       <h5> Authors: </h5>
       <span ng-repeat="author in paper.authors">{{ author }}{{$last ? '' : ', '}}</span>
-      <h5> Filter by Topic: </h5>
-      <!-- <span ng-repeat="topic in paper.topics">{{ topic }}{{$last ? '' : ', '}}</span> -->
+      <h5> Topics: </h5>
+      <span ng-repeat="topic in paper.topics">{{ keywords[topic] }}{{$last ? '' : ', '}}</span>
+      <h5> Filter Neighbors by Topic: </h5>
       <div class="checkbox" ng-repeat="topic in filters">
         <label><input type="checkbox" value="" ng-model="topic.value" ng-change="updateNodes(topic)">{{ keywords[topic.id] }}</label>
       </div>
