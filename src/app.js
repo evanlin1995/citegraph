@@ -90,6 +90,10 @@ app.controller('ResultsController', ['$scope', '$http', '$location', '$routePara
 
 app.controller('GraphController', ['$scope', '$http', '$routeParams', ($scope, $http, $routeParams) => {
 
+  $scope.hover = id => {
+    $scope.hoverNode = id;
+  };
+
   $scope.loading = true;
 
   $scope.$on('ngRepeatFinished', function(ngRepeatFinishedEvent) {
@@ -361,6 +365,7 @@ var drawGraph = ($scope, paper, neighbors) => {
     var curr_index = index;
     var score = getScore(curSketch, paper.neighborsF[i].s);
     theUI['nodes'][paper.neighborsF[i]._id] = {
+      _id:paper.neighborsF[i]._id,
       color: dilute(fBaseColor, 0, maxFScore - minFScore, maxFScore - score, 1.3),
       shape: "dot",
       label: "    " + curr_index + "    ",
@@ -387,6 +392,7 @@ var drawGraph = ($scope, paper, neighbors) => {
           curr_index = index;
           if (neighbor) {
             theUI['nodes'][neighbor._id] = {
+              _id:neighbor._id,
               color: secondaryBaseColor,
               shape: "dot",
               label: "    " + curr_index + "    ",
@@ -425,6 +431,7 @@ var drawGraph = ($scope, paper, neighbors) => {
           curr_index = index;
           if (neighbor) {
             theUI['nodes'][neighbor._id] = {
+              _id: neighbor._id,
               color: secondaryBaseColor,
               shape: "dot",
               label: "    " + curr_index + "    ",
@@ -462,6 +469,7 @@ var drawGraph = ($scope, paper, neighbors) => {
     var curr_index = index;
     var score = getScore(curSketch, paper.neighborsB[i].s);
     theUI.nodes[paper.neighborsB[i]._id] = {
+      _id: paper.neighborsB[i]._id,
       color: dilute(bBaseColor, 0, maxBScore - minBScore, maxBScore - score, 1.3),
       shape: "dot",
       label: "    " + curr_index + "    ",
@@ -489,6 +497,7 @@ var drawGraph = ($scope, paper, neighbors) => {
           curr_index = index;
           if (neighbor) {
             theUI['nodes'][neighbor._id] = {
+              _id: neighbor._id,
               color: secondaryBaseColor,
               shape: "dot",
               label: "    " + curr_index + "    ",
@@ -526,6 +535,7 @@ var drawGraph = ($scope, paper, neighbors) => {
           curr_index = index;
           if (neighbor) {
             theUI['nodes'][neighbor._id] = {
+              _id: neighbor._id,
               color: secondaryBaseColor,
               shape: "dot",
               label: "    " + curr_index + "    ",
@@ -553,7 +563,7 @@ var drawGraph = ($scope, paper, neighbors) => {
   $scope.sys = arbor.ParticleSystem(500, 900, 1); // create the system with sensible repulsion/stiffness/friction
   $scope.sys.parameters({gravity:true, dt:0.015}); // use center-gravity to make the graph settle nicely (ymmv)
   $scope.sys.fps(20);
-  $scope.sys.renderer = Renderer("#viewport", "#graph"); // our newly created renderer will have its .init() method called shortly by sys...
+  $scope.sys.renderer = Renderer("#viewport", "#graph", $scope); // our newly created renderer will have its .init() method called shortly by sys...
   $scope.sys.graft(theUI);
 
     // Iterate through all neighbors, store a mapping from their node ids to their scores

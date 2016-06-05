@@ -1,7 +1,8 @@
 (function(){
 
-  Renderer = function(canvasName, containerName){
-    var lastNode = -1
+  Renderer = function(canvasName, containerName, $scope){
+    $scope.lastNode = -1
+    var mouseNode = -1;
     var canvas = $(canvasName).get(0)
     var ctx = canvas.getContext("2d");
     var gfx = arbor.Graphics(canvas)
@@ -21,6 +22,11 @@
       },
 
       redraw:function(){
+
+        if (mouseNode === undefined || mouseNode == -1)
+          $scope.lastNode = $scope.hoverNode;
+        else $scope.lastNode = mouseNode;
+
         if (!particleSystem) return
 
         gfx.clear() // convenience ƒ: clears the whole canvas rect
@@ -34,16 +40,15 @@
         particleSystem.eachNode(function(node, pt){
           // node: {mass:#, p:{x,y}, name:"", data:{}}
           // pt:   {x:#, y:#}  node position in screen coords
-
           if (!node.data.show) return;
 
           ctx.globalCompositeOperation='destination-over';
-          if (node._id == lastNode) ctx.globalCompositeOperation='source-over';
+          if (node.data._id == $scope.lastNode) ctx.globalCompositeOperation='source-over';
 
           // determine the box size and round off the coords if we'll be
           // drawing a text label (awful alignment jitter otherwise...)
           var label = node.data.label||""
-          var w = (node._id == lastNode) ? ctx.measureText(""+label).width + 15 : ctx.measureText(""+label).width
+          var w = (node.data._id == $scope.lastNode) ? ctx.measureText(""+label).width + 15 : ctx.measureText(""+label).width
           if (!(""+label).match(/^[ \t]*$/)){
             pt.x = Math.floor(pt.x)
             pt.y = Math.floor(pt.y)
@@ -67,7 +72,7 @@
           // draw the text
           if (label){
             ctx.font = "10px Helvetica"
-            if (node._id == lastNode)
+            if (node.data._id == $scope.lastNode)
               ctx.font = "15px Helvetica"
             ctx.textAlign = "center"
             ctx.fillStyle = "white"
@@ -89,10 +94,10 @@
           if (!edge.data.show) return;
 
           var weight = edge.data.weight
-          var color = (lastNode == edge.source._id || lastNode == edge.target._id) ? 'red' : edge.data.color;
+          var color = ($scope.lastNode == edge.source.data._id || $scope.lastNode == edge.target.data._id) ? 'red' : edge.data.color;
 
           ctx.globalCompositeOperation='destination-over';
-          if (lastNode == edge.source._id || lastNode == edge.target._id) {
+          if ($scope.lastNode == edge.source.data._id || $scope.lastNode == edge.target.data._id) {
             ctx.globalCompositeOperation='source-over';
           }
 
@@ -154,7 +159,6 @@
       // for moves and mouseups while dragging
       var handler = {
         moved:function(e){
-          console.log("moved");
           var pos = $(canvas).offset();
           _mouseP = arbor.Point(e.pageX-pos.left, e.pageY-pos.top);
           nearest = particleSystem.nearest(_mouseP);
@@ -165,7 +169,8 @@
 
           var radius = ctx.measureText(""+nearest.node.data.label).width;
           selected = (nearest.distance < radius) ? nearest : null;
-          lastNode = (selected) ? selected.node._id : -1;
+          mouseNode = (selected) ? selected.node.data._id : -1;
+          if (mouseNode != -1) $scope.hoverNode = -1;
           return selected;
           // code for node that mouse is hovered on ('selected')
         },
@@ -187,7 +192,7 @@
         },
         dragged:function(e){
           console.log("dragged");
-          var old_nearest = nearest && nearest.node._id;
+          var old_nearest = nearest && nearest.node.data._id;
           var pos = $(canvas).offset();
           var s = arbor.Point(e.pageX-pos.left, e.pageY-pos.top);
           dragging = true;

@@ -60,7 +60,7 @@
         <h5> Neighbors: </h5>
         <div id="neighbor-container">
           <ol>
-            <li ng-repeat="neighbor in allNeighbors"><a href="/graph/{{ neighbor._id }}">{{ neighbor.t }}</a></li>
+            <li ng-repeat="neighbor in allNeighbors"><a href="/graph/{{ neighbor._id }}" ng-mouseover="hover(neighbor._id)">{{ neighbor.t }}</a></li>
           </ol>
         </div>
       </div>
