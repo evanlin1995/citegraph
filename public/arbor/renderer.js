@@ -152,9 +152,9 @@
               return false;
           }
 
-          var radius = ctx.measureText(""+nearest.node.data.label).width + 10;
+          var radius = ctx.measureText(""+nearest.node.data.label).width + 2;
           selected = (nearest.distance < radius) ? nearest : null;
-          if (selected) lastNode = selected.node._id;
+          lastNode = (selected) ? selected.node._id : -1;
           return selected;
           // code for node that mouse is hovered on ('selected')
         },
@@ -198,11 +198,11 @@
           if(dragging===false) {
 
             // code for clicked node (dragged.node)
-            alert(dragged.node.data.score);
+            // alert(dragged.node.data.score);
             
 
-            // var link = dragged.node.data.link;
-            // if (link) window.location = link;
+            var link = dragged.node.data.link;
+            if (link) window.location = link;
 
             // var update = dragged.node.data.update;
 

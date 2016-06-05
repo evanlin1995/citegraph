@@ -345,6 +345,8 @@ var drawGraph = ($scope, paper, neighbors) => {
     if (score < minBScore) minBScore = score;
   });
 
+  $scope.allNeighbors = [];
+
   for (var i = 0; i < paper.neighborsF.length; i++) {
     var b_count = 0;
     var f_count = 0;
@@ -362,6 +364,7 @@ var drawGraph = ($scope, paper, neighbors) => {
       update: updateGraph,
       score: score
     };
+    $scope.allNeighbors.push({ _id: paper.neighborsF[i]._id, t: paper.neighborsF[i].t });
     index++;
 
     var backNeighbors = paper.neighborsF[i].b;
@@ -387,6 +390,7 @@ var drawGraph = ($scope, paper, neighbors) => {
               update: updateGraph,
               score: getScore(curSketch, neighbor.s)
             };
+            $scope.allNeighbors.push({ _id: neighbor._id, t: neighbor.t });
             index++;
             b_count++;
 
@@ -423,6 +427,7 @@ var drawGraph = ($scope, paper, neighbors) => {
               update: updateGraph,
               score: getScore(curSketch, neighbor.s)
             };
+            $scope.allNeighbors.push({ _id: neighbor._id, t: neighbor.t });
             index++;
             f_count++;
 
@@ -434,6 +439,7 @@ var drawGraph = ($scope, paper, neighbors) => {
       }
     }
   }
+
 
   for (var i = 0; i < paper.neighborsB.length; i++) {
     var b_count = 0;
@@ -452,6 +458,7 @@ var drawGraph = ($scope, paper, neighbors) => {
       update: updateGraph,
       score: score
     };
+    $scope.allNeighbors.push({ _id: paper.neighborsB[i]._id, t: paper.neighborsB[i].t });
     index++;
 
     var backNeighbors = paper.neighborsB[i].b;
@@ -478,6 +485,7 @@ var drawGraph = ($scope, paper, neighbors) => {
               update: updateGraph,
               score: getScore(curSketch, neighbor.s)
             };
+            $scope.allNeighbors.push({ _id: neighbor._id, t: neighbor.t });
             index++;
             b_count++;
 
@@ -513,6 +521,7 @@ var drawGraph = ($scope, paper, neighbors) => {
               update: updateGraph,
               score: getScore(curSketch, neighbor.s)
             };
+            $scope.allNeighbors.push({ _id: neighbor._id, t: neighbor.t });
             index++;
             f_count++;
 
