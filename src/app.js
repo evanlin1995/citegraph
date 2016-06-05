@@ -107,7 +107,9 @@ app.controller('GraphController', ['$scope', '$http', '$routeParams', ($scope, $
   $scope.numChecked = 0;
 
   $scope.getDomain = function(link) {
-    return link.replace('http://','').replace('https://','').split(/[/?#]/)[0];
+    var domain = link.replace('http://','').replace('https://','').split(/[/?#]/)[0];
+    var trimmed_link = domain.concat(link.substr(link.length - 4))
+    return trimmed_link
   };
 
   $scope.updateNodes = function (topic) {
@@ -180,6 +182,7 @@ app.controller('GraphController', ['$scope', '$http', '$routeParams', ($scope, $
         );
       }
     }
+  
 
     // take the top n results
     $scope.filters.sort(function(t1, t2) {
@@ -305,24 +308,30 @@ var drawGraph = ($scope) => {
         score: getScore(curSketch, paper.neighborsF[i].s)
       };
       var backNeighbors = paper.neighborsF[i].b;
-      for (var j = 0; j < backNeighbors.length; j++) {
-        if (backNeighbors[j] in $scope.theUI.nodes) {
+      if (backNeighbors) {
+        var size = backNeighbors.length;
+        for (var j = 0; j < size; j++) {
+          if (backNeighbors[j] in $scope.theUI.nodes) {
 
-          if (!(paper.neighborsF[i]._id in $scope.theUI.edges))
-            $scope.theUI['edges'][paper.neighborsF[i]._id] = {};
-          $scope.theUI['edges'][paper.neighborsF[i]._id][backNeighbors[j]] = { show: true };
+            if (!(paper.neighborsF[i]._id in $scope.theUI.edges))
+              $scope.theUI['edges'][paper.neighborsF[i]._id] = {};
+            $scope.theUI['edges'][paper.neighborsF[i]._id][backNeighbors[j]] = { show: true };
 
+          }
         }
       }
 
       var frontNeighbors = paper.neighborsF[i].f;
-      for (var j = 0; j < frontNeighbors.length; j++) {
-        if (frontNeighbors[j] in $scope.theUI.nodes) {
-          // alert(JSON.stringify(frontNeighbors[j]));
-          // theUI.edges[paper.neighborsF[i]._id][frontNeighbors[j]] = {};
-          if (!(frontNeighbors[j] in $scope.theUI.edges))
-            $scope.theUI['edges'][frontNeighbors[j]] = {};
-          $scope.theUI['edges'][frontNeighbors[j]][paper.neighborsF[i]._id] = { show: true };
+      if (frontNeighbors) {
+        var size = frontNeighbors.length;
+        for (var j = 0; j < size; j++) {
+          if (frontNeighbors[j] in $scope.theUI.nodes) {
+            // alert(JSON.stringify(frontNeighbors[j]));
+            // theUI.edges[paper.neighborsF[i]._id][frontNeighbors[j]] = {};
+            if (!(frontNeighbors[j] in $scope.theUI.edges))
+              $scope.theUI['edges'][frontNeighbors[j]] = {};
+            $scope.theUI['edges'][frontNeighbors[j]][paper.neighborsF[i]._id] = { show: true };
+          }
         }
       }
       // theUI.edges[cur][paper.neighborsF[i]._id] = {};
