@@ -197,7 +197,7 @@ app.controller('GraphController', ['$scope', '$http', '$routeParams', ($scope, $
     }
     console.log(JSON.stringify($scope.filters));
 
-    drawGraph(paper, res.neighbors);
+    drawGraph($scope, paper, res.neighbors);
     $scope.loading = false;
   });
 
@@ -261,7 +261,7 @@ var getScore = (s1, s2) => {
 
 }
 
-var drawGraph = (paper, neighbors) => {
+var drawGraph = ($scope, paper, neighbors) => {
 
     var curID = paper.id;
 
@@ -311,7 +311,7 @@ var drawGraph = (paper, neighbors) => {
     // }
 
     console.log("what is happening");
-    console.log(paper.neighbors);
+    console.log(neighbors);
 
 
 
