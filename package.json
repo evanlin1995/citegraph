@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/evanlin1995/citegraph#readme",
   "dependencies": {
+    "bluebird": "^3.4.0",
     "ejs": "^2.4.1",
     "express": "^4.13.4",
     "mongoose": "^4.4.14"
