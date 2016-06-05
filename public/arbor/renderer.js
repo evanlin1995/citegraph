@@ -64,11 +64,14 @@
           // draw the text
           if (label){
             ctx.font = "10px Helvetica"
+            if (node._id == lastNode)
+              ctx.font = "15px Helvetica"
             ctx.textAlign = "center"
             ctx.fillStyle = "white"
             if (node.data.color=='none') ctx.fillStyle = '#333333'
             ctx.fillText(label||"", pt.x, pt.y+4)
             ctx.fillText(label||"", pt.x, pt.y+4)
+            ctx.font = "10px Helvetica"
           }
         })    			
 
