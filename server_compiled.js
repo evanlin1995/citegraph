@@ -9,10 +9,13 @@ var Keyword = require('./src/keywords');
 var Author = require('./src/authors');
 var mongoose = require('mongoose');
 var keywordsJSON = require("./public/keywords.json");
+var Promise = require('bluebird');
 
 mongoose.connect('mongodb://40.121.82.254:27017/cv');
+mongoose.Promise = Promise;
 
 var STATUS_OK = 200;
+var STATUS_ERR = 500;
 
 function toTitleCase(str) {
   return str.replace(/\w\S*/g, function (txt) {
@@ -44,45 +47,64 @@ app.get('/keywords', function (req, res) {
   res.status(STATUS_OK).json(keywordsJSON);
 });
 
+function getPaper(id) {
+  return Paper.find({ _id: { $in: id } }).lean().exec();
+}
+
 app.get('/paper/:id', function (req, res) {
   var id = req.params.id;
 
-  Paper.findOne({ _id: id }).lean().exec(function (err, paper) {
+  // jank AF
+  var r = {};
 
-    if (err || !paper) console.log(err);else {
+  Paper.findOne({ _id: id }).lean().exec().then(function (paper) {
+    r.paper = paper;
+    return Author.find({ _id: { $in: r.paper.a } }).lean().exec();
+  }).then(function (authors) {
+    r.authors = authors;
+    return getPaper(r.paper.b);
+  }).then(function (neighborsB) {
+    r.neighborsB = neighborsB;
+    return getPaper(r.paper.f);
+  }).then(function (neighborsF) {
+    r.neighborsF = neighborsF;
+  }).catch(function (e) {
+    console.log(e);
+    res.status(STATUS_ERR).json({ err: e });
+  }).then(function () {
+    var paperNode = {
+      id: r.paper._id,
+      title: r.paper.t,
+      authors: r.authors.map(function (a) {
+        return toTitleCase(a.n);
+      }),
+      topics: r.paper.k,
+      conference: r.paper.c,
+      links: r.paper.u,
+      neighborsB: r.neighborsB,
+      neighborsF: r.neighborsF,
+      sketch: r.paper.s
+    };
 
-      Author.find({ _id: { $in: paper.a } }).lean().exec(function (err, authors) {
+    var neighborNodes = [];
+    var neighborQs = [];
 
-        if (err) console.log(err);else {
+    var addToNeighbors = function addToNeighbors(n) {
+      neighborQs.push(getPaper(n._id).then(function (p) {
+        neighborNodes.push(p);
+      }));
+    };
 
-          Paper.find({ _id: { $in: paper.b } }).lean().exec(function (err, neighborsB) {
+    r.neighborsB.forEach(addToNeighbors);
+    r.neighborsF.forEach(addToNeighbors);
 
-            if (err) console.log(err);else {
-
-              Paper.find({ _id: { $in: paper.f } }).lean().exec(function (err, neighborsF) {
-                var result = {
-                  id: paper._id,
-                  title: paper.t,
-                  authors: authors.map(function (a) {
-                    return toTitleCase(a.n);
-                  }),
-                  topics: paper.k,
-                  conference: paper.c,
-                  links: paper.u,
-                  neighborsB: neighborsB,
-                  neighborsF: neighborsF,
-                  sketch: paper.s
-                };
-
-                console.log(result);
-
-                res.status(STATUS_OK).json(result);
-              });
-            }
-          });
-        }
-      });
-    }
+    Promise.all(neighborQs).then(function () {
+      var response = {
+        paper: paperNode,
+        neighbors: neighborNodes
+      };
+      res.status(STATUS_OK).json(response);
+    });
   });
 });
 

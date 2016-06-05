@@ -153,7 +153,7 @@ app.controller('GraphController', ['$scope', '$http', '$routeParams', ($scope, $
   var query = $routeParams.query;
 
   $http.get('/paper/' + query).success((res) => {
-    $scope.paper = res;
+    $scope.paper = res.paper;
 
     var backNeighbors = $scope.paper.neighborsB;
     var backSize = backNeighbors.length;
@@ -266,12 +266,12 @@ var drawGraph = ($scope) => {
     var paper = $scope.paper;
     var curID = paper.id;
 
-    $scope.theUI = {
+    var theUI = {
       nodes: {},
       edges: {}
     };
 
-    $scope.theUI.nodes[curID] = {
+    theUI.nodes[curID] = {
       color: "red",
       shape: "dot",
       label: "          ",
@@ -279,17 +279,17 @@ var drawGraph = ($scope) => {
       center: true
     };
 
-    $scope.theUI.edges[curID] = {};
+    theUI.edges[curID] = {};
 
     if (paper.neighborsF.length == 0 && paper.neighborsB.length == 0) {
-      $scope.theUI.nodes['dummyNode'] = {
+      theUI.nodes['dummyNode'] = {
         color: 'white',
         shape: 'dot',
         show: true,
         center: true
-      }
+      };
 
-      $scope.theUI.edges[curID]['dummyNode'] = { color: 'white', show: true };
+      theUI.edges[curID]['dummyNode'] = { color: 'white', show: true };
 
     }
 
@@ -298,7 +298,7 @@ var drawGraph = ($scope) => {
     var curSketch = paper.sketch;
 
     for (var i = 0; i < paper.neighborsF.length; i++) {
-      $scope.theUI['nodes'][paper.neighborsF[i]._id] = {
+      theUI['nodes'][paper.neighborsF[i]._id] = {
         color: "orange",
         shape: "dot",
         label: "    " + index + "    ",
@@ -313,11 +313,11 @@ var drawGraph = ($scope) => {
       if (backNeighbors) {
         var size = backNeighbors.length;
         for (var j = 0; j < size; j++) {
-          if (backNeighbors[j] in $scope.theUI.nodes) {
+          if (backNeighbors[j] in theUI.nodes) {
 
-            if (!(paper.neighborsF[i]._id in $scope.theUI.edges))
-              $scope.theUI['edges'][paper.neighborsF[i]._id] = {};
-            $scope.theUI['edges'][paper.neighborsF[i]._id][backNeighbors[j]] = { show: true };
+            if (!(paper.neighborsF[i]._id in theUI.edges))
+              theUI['edges'][paper.neighborsF[i]._id] = {};
+            theUI['edges'][paper.neighborsF[i]._id][backNeighbors[j]] = { show: true };
 
           }
         }
@@ -327,12 +327,12 @@ var drawGraph = ($scope) => {
       if (frontNeighbors) {
         var size = frontNeighbors.length;
         for (var j = 0; j < size; j++) {
-          if (frontNeighbors[j] in $scope.theUI.nodes) {
+          if (frontNeighbors[j] in theUI.nodes) {
             // alert(JSON.stringify(frontNeighbors[j]));
             // theUI.edges[paper.neighborsF[i]._id][frontNeighbors[j]] = {};
-            if (!(frontNeighbors[j] in $scope.theUI.edges))
-              $scope.theUI['edges'][frontNeighbors[j]] = {};
-            $scope.theUI['edges'][frontNeighbors[j]][paper.neighborsF[i]._id] = { show: true };
+            if (!(frontNeighbors[j] in theUI.edges))
+              theUI['edges'][frontNeighbors[j]] = {};
+            theUI['edges'][frontNeighbors[j]][paper.neighborsF[i]._id] = { show: true };
           }
         }
       }
@@ -342,7 +342,7 @@ var drawGraph = ($scope) => {
 
 
     for (var i = 0; i < paper.neighborsB.length; i++) {
-      $scope.theUI.nodes[paper.neighborsB[i]._id] = {
+      theUI.nodes[paper.neighborsB[i]._id] = {
         color: "blue",
         shape: "dot",
         label: "    " + index + "    ",
@@ -354,22 +354,28 @@ var drawGraph = ($scope) => {
         score: getScore(curSketch, paper.neighborsB[i].s)
       };
       var backNeighbors = paper.neighborsB[i].b;
-      for (var j = 0; j < backNeighbors.length; j++) {
-        if (backNeighbors[j] in $scope.theUI.nodes) {
+      if (backNeighbors) {
+        var size = backNeighbors.length;
+        for (var j = 0; j < size; j++) {
+          if (backNeighbors[j] in theUI.nodes) {
 
-          if (!(paper.neighborsB[i]._id in $scope.theUI.edges))
-            $scope.theUI['edges'][paper.neighborsB[i]._id] = {};
-          $scope.theUI['edges'][paper.neighborsB[i]._id][backNeighbors[j]] = { show: true };
+            if (!(paper.neighborsB[i]._id in theUI.edges))
+              theUI['edges'][paper.neighborsB[i]._id] = {};
+            theUI['edges'][paper.neighborsB[i]._id][backNeighbors[j]] = { show: true };
+          }
         }
       }
 
       var frontNeighbors = paper.neighborsB[i].f;
-      for (var j = 0; j < frontNeighbors.length; j++) {
-        if (frontNeighbors[j] in $scope.theUI.nodes) {
+      if (frontNeighbors) {
+        var size = frontNeighbors.length;
+        for (var j = 0; j < size; j++) {
+          if (frontNeighbors[j] in theUI.nodes) {
 
-          if (!(frontNeighbors[j] in $scope.theUI.edges))
-            $scope.theUI['edges'][frontNeighbors[j]] = {};
-          $scope.theUI['edges'][frontNeighbors[j]][paper.neighborsB[i]._id] = { show: true };
+            if (!(frontNeighbors[j] in theUI.edges))
+              theUI['edges'][frontNeighbors[j]] = {};
+            theUI['edges'][frontNeighbors[j]][paper.neighborsB[i]._id] = { show: true };
+          }
         }
       }
       index++;
@@ -380,7 +386,7 @@ var drawGraph = ($scope) => {
     $scope.sys = arbor.ParticleSystem(500, 900, 1); // create the system with sensible repulsion/stiffness/friction
     $scope.sys.parameters({gravity:true, dt:0.015}); // use center-gravity to make the graph settle nicely (ymmv)
     $scope.sys.renderer = Renderer("#viewport"); // our newly created renderer will have its .init() method called shortly by sys...
-    $scope.sys.graft($scope.theUI);
+    $scope.sys.graft(theUI);
 
     // Iterate through all neighbors, store a mapping from their node ids to their scores
 

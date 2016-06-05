@@ -6,11 +6,14 @@ var Paper = require('./src/paper');
 var Keyword = require('./src/keywords');
 var Author = require('./src/authors');
 var mongoose = require('mongoose');
-var keywordsJSON = require("./public/keywords.json")
+var keywordsJSON = require("./public/keywords.json");
+var Promise = require('bluebird');
 
 mongoose.connect('mongodb://40.121.82.254:27017/cv');
+mongoose.Promise = Promise;
 
 var STATUS_OK = 200;
+var STATUS_ERR = 500;
 
 function toTitleCase(str)
 {
@@ -50,47 +53,64 @@ app.get('/keywords', (req, res) => {
   res.status(STATUS_OK).json(keywordsJSON);
 });
 
+function getPaper(id) {
+  return Paper.find({ _id: { $in: id } }).lean().exec();
+}
+
 app.get('/paper/:id', (req, res) => {
   var id = req.params.id;
 
-  Paper.findOne({ _id: id }).lean().exec( (err, paper) => {
+  // jank AF
+  var r = {};
 
-    if (err || !paper) console.log(err);
-    else {
+  Paper.findOne({ _id: id }).lean().exec().then(paper => {
+    r.paper = paper;
+    return Author.find({ _id: { $in: r.paper.a } }).lean().exec();
+  }).then(authors => {
+    r.authors = authors;
+    return getPaper(r.paper.b);
+  }).then(neighborsB => {
+    r.neighborsB = neighborsB;
+    return getPaper(r.paper.f);
+  }).then(neighborsF => {
+    r.neighborsF = neighborsF;
+  }).catch(e => {
+    console.log(e);
+    res.status(STATUS_ERR).json({err:e});
+  }).then(() => {
+    var paperNode = {
+      id: r.paper._id,
+      title: r.paper.t,
+      authors: r.authors.map(a => { return toTitleCase(a.n); }),
+      topics: r.paper.k,
+      conference: r.paper.c,
+      links: r.paper.u,
+      neighborsB: r.neighborsB,
+      neighborsF: r.neighborsF,
+      sketch: r.paper.s
+    };
 
-      Author.find({ _id: { $in: paper.a } }).lean().exec((err, authors) => {
+    var neighborNodes = [];
+    var neighborQs = [];
 
-        if (err) console.log(err);
-        else {
+    var addToNeighbors = n => {
+      neighborQs.push(getPaper(n._id).then(p => {
+        neighborNodes.push(p);
+      }));};
 
-          Paper.find({ _id: { $in: paper.b } }).lean().exec((err, neighborsB) => {
+    r.neighborsB.forEach(addToNeighbors);
+    r.neighborsF.forEach(addToNeighbors);
 
-            if (err) console.log(err);
-            else {
+    Promise.all(neighborQs).then(() => {
+      var response = {
+        paper: paperNode,
+        neighbors: neighborNodes
+      };
+      res.status(STATUS_OK).json(response);
+    });
 
-              Paper.find({ _id: { $in: paper.f } }).lean().exec((err, neighborsF) => {
-                var result = {
-                  id: paper._id,
-                  title: paper.t,
-                  authors: authors.map(function (a) { return toTitleCase(a.n); }),
-                  topics: paper.k,
-                  conference: paper.c,
-                  links: paper.u,
-                  neighborsB: neighborsB,
-                  neighborsF: neighborsF,
-                  sketch: paper.s
-                };
-
-                console.log(result);
-
-                res.status(STATUS_OK).json(result);
-              });
-            }
-          });
-        }
-      });
-    }
   });
+
 });
 
 app.get('/', (req, res) => { res.render("layout"); });
