@@ -72,6 +72,7 @@
           }
         })    			
 
+        ctx.globalCompositeOperation='destination-over';
 
         // draw the edges
         particleSystem.eachEdge(function(edge, pt1, pt2){
@@ -89,6 +90,7 @@
           // find the start point
           var tail = intersect_line_box(pt1, pt2, nodeBoxes[edge.source.name])
           var head = intersect_line_box(tail, pt2, nodeBoxes[edge.target.name])
+
 
           ctx.save() 
             ctx.beginPath()
@@ -113,7 +115,7 @@
               ctx.rotate(Math.atan2(head.y - tail.y, head.x - tail.x));
 
               // delete some of the edge that's already there (so the point isn't hidden)
-              ctx.clearRect(-arrowLength/2,-wt/2, arrowLength/2,wt)
+              // ctx.clearRect(-arrowLength/2,-wt/2, arrowLength/2,wt)
 
               // draw the chevron
               ctx.beginPath();
