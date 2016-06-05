@@ -55,12 +55,11 @@
       <ol>
         <li ng-repeat="link in paper.links"><a href="{{ link }}" target="_blank">{{ truncateLink(link) }}</a></li>
       </ol>
-      <div ng-show="paper.neighborsF">
+      <div ng-show="allNeighbors">
         <h5> Neighbors </h5>
         <div id="neighbor-container">
           <ol>
-            <li ng-repeat="neighbor in paper.neighborsF"><a href="/graph/{{ neighbor._id }}">{{ neighbor.t }}</a></li>
-            <li ng-repeat="neighbor in paper.neighborsB"><a href="/graph/{{ neighbor._id }}">{{ neighbor.t }}</a></li>
+            <li ng-repeat="neighbor in allNeighbors"><a href="/graph/{{ neighbor._id }}">{{ neighbor.t }}</a></li>
           </ol>
         </div>
       </div>
