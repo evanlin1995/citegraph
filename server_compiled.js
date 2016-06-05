@@ -10,7 +10,7 @@ var Author = require('./src/authors');
 var mongoose = require('mongoose');
 var keywordsJSON = require("./public/keywords.json");
 
-mongoose.connect('mongodb://13.92.125.6:27017/cv');
+mongoose.connect('mongodb://40.76.3.96:27017/cv');
 
 var STATUS_OK = 200;
 
@@ -51,38 +51,32 @@ app.get('/paper/:id', function (req, res) {
 
     if (err || !paper) console.log(err);else {
 
-      Keyword.find({ _id: { $in: paper.k } }, function (err, keywords) {
+      Author.find({ _id: { $in: paper.a } }, function (err, authors) {
 
         if (err) console.log(err);else {
 
-          Author.find({ _id: { $in: paper.a } }, function (err, authors) {
+          Paper.find({ _id: { $in: paper.b } }, function (err, neighborsB) {
 
             if (err) console.log(err);else {
 
-              Paper.find({ _id: { $in: paper.b } }, function (err, neighborsB) {
+              Paper.find({ _id: { $in: paper.f } }, function (err, neighborsF) {
+                var result = {
+                  id: paper._id,
+                  title: paper.t,
+                  authors: authors.map(function (a) {
+                    return toTitleCase(a.n);
+                  }),
+                  topics: paper.k,
+                  conference: paper.c,
+                  links: paper.u,
+                  neighborsB: neighborsB,
+                  neighborsF: neighborsF,
+                  sketch: paper.s
+                };
 
-                if (err) console.log(err);else {
+                console.log(result);
 
-                  Paper.find({ _id: { $in: paper.f } }, function (err, neighborsF) {
-                    var result = {
-                      id: paper._id,
-                      title: paper.t,
-                      authors: authors.map(function (a) {
-                        return toTitleCase(a.n);
-                      }),
-                      topics: keywords,
-                      conference: paper.c,
-                      links: paper.u,
-                      neighborsB: neighborsB,
-                      neighborsF: neighborsF,
-                      sketch: paper.s
-                    };
-
-                    console.log(result);
-
-                    res.status(STATUS_OK).json(result);
-                  });
-                }
+                res.status(STATUS_OK).json(result);
               });
             }
           });
