@@ -95,7 +95,7 @@
           ctx.save() 
             ctx.beginPath()
             ctx.lineWidth = (!isNaN(weight)) ? parseFloat(weight) : 1
-            ctx.strokeStyle = (color) ? color : "#cccccc"
+            ctx.strokeStyle = (color) ? color : "#E8E8E8"
             ctx.fillStyle = null
 
             ctx.moveTo(tail.x, tail.y)
