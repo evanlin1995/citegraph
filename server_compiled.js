@@ -104,20 +104,6 @@ app.get('/paper/:id', function (req, res) {
       }));
     };
 
-    // var addToNeighbors = n => {
-    //   neighborQs.push(getPaper(n._id).then(p => {
-    //     getPaper(p.b).then(secondNeighbors => {
-    //       secondNeighbors.forEach(s => {
-    //         neighborNodes[s._id] = s;
-    //       });
-    //       return getPaper(p.f);
-    //     }).then(secondNeighbors => {
-    //       secondNeighbors.forEach(s => {
-    //         neighborNodes[s._id] = s;
-    //       });
-    //     });
-    //   }));};
-
     r.neighborsB.forEach(addNeighbors);
     r.neighborsF.forEach(addNeighbors);
 
