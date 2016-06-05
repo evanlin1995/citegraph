@@ -352,22 +352,28 @@ var drawGraph = ($scope) => {
         score: getScore(curSketch, paper.neighborsB[i].s)
       };
       var backNeighbors = paper.neighborsB[i].b;
-      for (var j = 0; j < backNeighbors.length; j++) {
-        if (backNeighbors[j] in theUI.nodes) {
+      if (backNeighbors) {
+        var size = backNeighbors.length;
+        for (var j = 0; j < size; j++) {
+          if (backNeighbors[j] in theUI.nodes) {
 
-          if (!(paper.neighborsB[i]._id in theUI.edges))
-            theUI['edges'][paper.neighborsB[i]._id] = {};
-          theUI['edges'][paper.neighborsB[i]._id][backNeighbors[j]] = { show: true };
+            if (!(paper.neighborsB[i]._id in theUI.edges))
+              theUI['edges'][paper.neighborsB[i]._id] = {};
+            theUI['edges'][paper.neighborsB[i]._id][backNeighbors[j]] = { show: true };
+          }
         }
       }
 
       var frontNeighbors = paper.neighborsB[i].f;
-      for (var j = 0; j < frontNeighbors.length; j++) {
-        if (frontNeighbors[j] in theUI.nodes) {
+      if (frontNeighbors) {
+        var size = frontNeighbors.length;
+        for (var j = 0; j < size; j++) {
+          if (frontNeighbors[j] in theUI.nodes) {
 
-          if (!(frontNeighbors[j] in theUI.edges))
-            theUI['edges'][frontNeighbors[j]] = {};
-          theUI['edges'][frontNeighbors[j]][paper.neighborsB[i]._id] = { show: true };
+            if (!(frontNeighbors[j] in theUI.edges))
+              theUI['edges'][frontNeighbors[j]] = {};
+            theUI['edges'][frontNeighbors[j]][paper.neighborsB[i]._id] = { show: true };
+          }
         }
       }
       index++;
