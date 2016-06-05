@@ -270,7 +270,7 @@ ol {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    line-height: 28px;
+    line-height: 48px;
 }
 
 .graph-sidebar-content {
