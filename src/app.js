@@ -169,21 +169,20 @@ app.controller('GraphController', ['$scope', '$http', '$routeParams', ($scope, $
     }
 
     var frontNeighbors = $scope.paper.neighborsF;
-    if (frontNeighbors) {
-      var frontSize = frontNeighbors.length;
-      for (var i = 0; i < frontSize; i++) {
-        var numTopics = frontNeighbors[i].k.length;
-        for (var j = 0; j < numTopics; j++) {
-          var curTopic = frontNeighbors[i].k[j];
-          var index = search($scope.filters, curTopic);
-          if (index != -1)
-            $scope.filters[index].count++;
-          else $scope.filters.push(
-            { id: curTopic, count: 1, value: false }
-          );
-        }
+    var frontSize = frontNeighbors.length;
+    for (var i = 0; i < frontSize; i++) {
+      var numTopics = frontNeighbors[i].k.length;
+      for (var j = 0; j < numTopics; j++) {
+        var curTopic = frontNeighbors[i].k[j];
+        var index = search($scope.filters, curTopic);
+        if (index != -1)
+          $scope.filters[index].count++;
+        else $scope.filters.push(
+          { id: curTopic, count: 1, value: false }
+        );
       }
     }
+  
 
     // take the top n results
     $scope.filters.sort(function(t1, t2) {
