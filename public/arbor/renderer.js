@@ -40,7 +40,7 @@
           // determine the box size and round off the coords if we'll be 
           // drawing a text label (awful alignment jitter otherwise...)
           var label = node.data.label||""
-          var w = ctx.measureText(""+label).width
+          var w = (node._id == lastNode) ? ctx.measureText(""+label).width + 15 : ctx.measureText(""+label).width
           if (!(""+label).match(/^[ \t]*$/)){
             pt.x = Math.floor(pt.x)
             pt.y = Math.floor(pt.y)
@@ -152,7 +152,7 @@
               return false;
           }
 
-          var radius = ctx.measureText(""+nearest.node.data.label).width + 2;
+          var radius = ctx.measureText(""+nearest.node.data.label).width;
           selected = (nearest.distance < radius) ? nearest : null;
           lastNode = (selected) ? selected.node._id : -1;
           return selected;
