@@ -1,5 +1,5 @@
 (function(){
-  
+
   Renderer = function(canvasName, containerName){
     var lastNode = -1
     var canvas = $(canvasName).get(0)
@@ -37,7 +37,10 @@
 
           if (!node.data.show) return;
 
-          // determine the box size and round off the coords if we'll be 
+          ctx.globalCompositeOperation='destination-over';
+          if (node._id == lastNode) ctx.globalCompositeOperation='source-over';
+
+          // determine the box size and round off the coords if we'll be
           // drawing a text label (awful alignment jitter otherwise...)
           var label = node.data.label||""
           var w = (node._id == lastNode) ? ctx.measureText(""+label).width + 15 : ctx.measureText(""+label).width
@@ -73,7 +76,7 @@
             ctx.fillText(label||"", pt.x, pt.y+4)
             ctx.font = "10px Helvetica"
           }
-        })    			
+        })
 
         ctx.globalCompositeOperation='destination-over';
 
@@ -88,6 +91,11 @@
           var weight = edge.data.weight
           var color = (lastNode == edge.source._id || lastNode == edge.target._id) ? 'red' : edge.data.color;
 
+          ctx.globalCompositeOperation='destination-over';
+          if (lastNode == edge.source._id || lastNode == edge.target._id) {
+            ctx.globalCompositeOperation='source-over';
+          }
+
           if (!color || (""+color).match(/^[ \t]*$/)) color = null
 
           // find the start point
@@ -95,7 +103,7 @@
           var head = intersect_line_box(tail, pt2, nodeBoxes[edge.target.name])
 
 
-          ctx.save() 
+          ctx.save()
             ctx.beginPath()
             ctx.lineWidth = (!isNaN(weight)) ? parseFloat(weight) : 1
             ctx.strokeStyle = (color) ? color : "#E8E8E8"
@@ -202,7 +210,7 @@
 
             // code for clicked node (dragged.node)
             // alert(dragged.node.data.score);
-            
+
 
             var link = dragged.node.data.link;
             if (link) window.location = link;
@@ -265,6 +273,6 @@
     }
 
     return that
-  }    
-  
+  }
+
 })()
