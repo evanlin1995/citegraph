@@ -1,7 +1,7 @@
 (function(){
   
-  Renderer = function(canvas){
-    var canvas = $(canvas).get(0)
+  Renderer = function(canvasName, containerName){
+    var canvas = $(canvasName).get(0)
     var ctx = canvas.getContext("2d");
     var gfx = arbor.Graphics(canvas)
     var particleSystem = null
@@ -9,7 +9,11 @@
     var that = {
       init:function(system){
         particleSystem = system
-        particleSystem.screenSize(canvas.width, canvas.height) 
+
+        // ctx.canvas.width = $(containerName).innerWidth();
+        // ctx.canvas.height = $(containerName).innerHeight();
+        // particleSystem.screenSize(canvas.width, canvas.height)
+
         particleSystem.screenPadding(40)
 
         that.initMouseHandling()
@@ -19,6 +23,10 @@
         if (!particleSystem) return
 
         gfx.clear() // convenience ƒ: clears the whole canvas rect
+
+        ctx.canvas.width = $(containerName).innerWidth();
+        ctx.canvas.height = $(containerName).innerHeight();
+        particleSystem.screenSize(canvas.width, canvas.height);
 
         // draw the nodes & save their bounds for edge drawing
         var nodeBoxes = {}
