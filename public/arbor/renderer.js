@@ -198,11 +198,11 @@
           if(dragging===false) {
 
             // code for clicked node (dragged.node)
-            alert(dragged.node.data.score);
+            // alert(dragged.node.data.score);
             
 
-            // var link = dragged.node.data.link;
-            // if (link) window.location = link;
+            var link = dragged.node.data.link;
+            if (link) window.location = link;
 
             // var update = dragged.node.data.update;
 
