@@ -220,7 +220,7 @@ app.controller('GraphController', ['$scope', '$http', '$routeParams', ($scope, $
       else if (id in res.neighbors) date = res.neighbors[id].d;
       else return "";
 
-      if (!date) return '';
+      if (!date || date.length < 4) return '';
 
       return " (" + date.substr(0, 4) + ")";
     };
