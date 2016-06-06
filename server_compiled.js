@@ -82,7 +82,8 @@ app.get('/paper/:id', function (req, res) {
       links: r.paper.u,
       neighborsB: r.neighborsB,
       neighborsF: r.neighborsF,
-      sketch: r.paper.s
+      sketch: r.paper.s,
+      date: r.paper.d
     };
 
     var neighborNodes = {};

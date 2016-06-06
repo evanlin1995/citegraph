@@ -34,7 +34,7 @@
       <div ng-hide="loading">
 
       <h5> Title: </h5>
-      {{paper.title}}
+      {{paper.title}}{{getYear(paper.id)}}
       <h5> Authors: </h5>
       <span ng-repeat="author in paper.authors">{{ author }}{{$last ? '' : ', '}}</span>
       <h5> Topics: </h5>
@@ -78,7 +78,7 @@
       <div class="col-md-9 graph-graph" id="graph">
         <canvas id="viewport"></canvas>
       </div>
-      <div class="node-label" ng-hide="lastNode<0">{{getNodeName(lastNode)}}</div>
+      <div class="node-label" ng-hide="lastNode<0">{{getNodeName(lastNode)}}{{getYear(lastNode)}}</div>
 
     </div>
   </main>
