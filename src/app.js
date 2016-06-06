@@ -189,6 +189,10 @@ app.controller('GraphController', ['$scope', '$http', '$routeParams', ($scope, $
       }
     }
   
+    $scope.getNodeName = id => {
+      if (id < 0) return "";
+      return res.neighbors[id].t;
+    };
 
     // take the top n results
     $scope.filters.sort(function(t1, t2) {

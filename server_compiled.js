@@ -11,7 +11,7 @@ var mongoose = require('mongoose');
 var keywordsJSON = require("./public/keywords.json");
 var Promise = require('bluebird');
 
-mongoose.connect('mongodb://40.121.82.254:27017/cv');
+mongoose.connect('mongodb://104.41.148.101:27017/cv');
 mongoose.Promise = Promise;
 
 var STATUS_OK = 200;
@@ -89,6 +89,7 @@ app.get('/paper/:id', function (req, res) {
     var neighborQs = [];
 
     var addNeighbors = function addNeighbors(n) {
+      neighborNodes[n._id] = n;
       neighborQs.push(getPaper(n.b).then(function (neighbors) {
         neighbors.forEach(function (s) {
           neighborNodes[s._id] = s;

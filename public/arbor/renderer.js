@@ -26,6 +26,7 @@
         if (mouseNode === undefined || mouseNode == -1)
           $scope.lastNode = $scope.hoverNode;
         else $scope.lastNode = mouseNode;
+        $scope.$apply();
 
         if (!particleSystem) return
 

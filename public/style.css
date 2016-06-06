@@ -286,6 +286,16 @@ ol {
     color: rgb(63, 81, 181);
 }
 
+.node-label {
+    float: right;
+    font-family: Roboto;
+    font-size: 15px;
+    font-weight: 200;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+}
+
 .hl {
     display: block;
     width: 100%;
