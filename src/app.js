@@ -308,7 +308,7 @@ var drawGraph = ($scope, paper, neighbors) => {
   var nodeColor = "#BF1D81";
   var fBaseColor = "#E53822";
   var bBaseColor = "#09A8B2";
-  var secondaryBaseColor = dilute("#22344C", 0, 100, 83, 1);
+  var secondaryBaseColor = dilute("#22344C", 0, 100, 50, 1);
 
   var theUI = {
     nodes: {},
@@ -355,6 +355,14 @@ var drawGraph = ($scope, paper, neighbors) => {
     if (score < minBScore) minBScore = score;
   });
 
+  var maxNScore = -1, minNScore = Number.MAX_SAFE_INTEGER;
+  for (var key in neighbors) {
+    var neighbor = neighbors[key];
+    var score = getScore(curSketch, neighbor.s);
+    if (score > maxNScore) maxNScore = score;
+    if (score < minNScore) minNScore = score;
+  }
+
   $scope.allNeighbors = [];
 
   for (var i = 0; i < paper.neighborsF.length; i++) {
@@ -397,7 +405,7 @@ var drawGraph = ($scope, paper, neighbors) => {
           if (neighbor) {
             theUI['nodes'][neighbor._id] = {
               _id:neighbor._id,
-              color: secondaryBaseColor,
+              color: dilute(secondaryBaseColor, 0, maxNScore - minNScore, maxNScore - score, 1.3),
               shape: "dot",
               label: "    " + curr_index + "    ",
               keywords: neighbor.k,
@@ -435,7 +443,7 @@ var drawGraph = ($scope, paper, neighbors) => {
           if (neighbor) {
             theUI['nodes'][neighbor._id] = {
               _id: neighbor._id,
-              color: secondaryBaseColor,
+              color: dilute(secondaryBaseColor, 0, maxNScore - minNScore, maxNScore - score, 1.3),
               shape: "dot",
               label: "    " + curr_index + "    ",
               keywords: neighbor.k,
@@ -500,7 +508,7 @@ var drawGraph = ($scope, paper, neighbors) => {
           if (neighbor) {
             theUI['nodes'][neighbor._id] = {
               _id: neighbor._id,
-              color: secondaryBaseColor,
+              color: dilute(secondaryBaseColor, 0, maxNScore - minNScore, maxNScore - score, 1.3),
               shape: "dot",
               label: "    " + curr_index + "    ",
               keywords: neighbor.k,
@@ -537,7 +545,7 @@ var drawGraph = ($scope, paper, neighbors) => {
           if (neighbor) {
             theUI['nodes'][neighbor._id] = {
               _id: neighbor._id,
-              color: secondaryBaseColor,
+              color: dilute(secondaryBaseColor, 0, maxNScore - minNScore, maxNScore - score, 1.3),
               shape: "dot",
               label: "    " + curr_index + "    ",
               keywords: neighbor.k,
