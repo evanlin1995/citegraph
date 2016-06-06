@@ -51,7 +51,7 @@
           var label = node.data.label||""
           var w = (node.data._id == $scope.lastNode) ? ctx.measureText(""+label).width + 15 : ctx.measureText(""+label).width
           if (node.data.center) {
-            w = (node.data._id == $scope.lastNode) ? ctx.measureText(""+label).width + 35 : ctx.measureText(""+label).width + 20
+            w = (node.data._id == $scope.lastNode) ? ctx.measureText(""+label).width + 20 : ctx.measureText(""+label).width + 5
           }
           if (!(""+label).match(/^[ \t]*$/)){
             pt.x = Math.floor(pt.x)
@@ -99,6 +99,7 @@
 
           var weight = edge.data.weight
           var color = ($scope.lastNode == edge.source.data._id || $scope.lastNode == edge.target.data._id) ? 'red' : edge.data.color;
+          if (edge.data.color == 'white') color = edge.data.color;
 
           ctx.globalCompositeOperation='destination-over';
           if ($scope.lastNode == edge.source.data._id || $scope.lastNode == edge.target.data._id) {

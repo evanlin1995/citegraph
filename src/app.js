@@ -191,6 +191,8 @@ app.controller('GraphController', ['$scope', '$http', '$routeParams', ($scope, $
   
     $scope.getNodeName = id => {
       if (id < 0) return "";
+      else if (id == res.paper.id) return res.paper.title;
+      else if (!(id in res.neighbors)) return "";
       return res.neighbors[id].t;
     };
 
@@ -334,7 +336,7 @@ var drawGraph = ($scope, paper, neighbors) => {
       center: true
     };
 
-    theUI.edges[curID]['dummyNode'] = { color: 'white', show: true };
+    theUI.edges[curID]['dummyNode'] = { color: 'white', show: true, length: 0.1 };
 
   }
 
