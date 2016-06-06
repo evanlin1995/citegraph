@@ -188,6 +188,21 @@ app.controller('GraphController', ['$scope', '$http', '$routeParams', ($scope, $
         );
       }
     }
+
+    // if we want to grab top keywords from current paper
+    // var sketch = $scope.paper.sketch;
+
+    // for (var key in sketch) {
+    //   if (!sketch.hasOwnProperty(key)) continue;
+    //   $scope.filters.push({ id: key, weight: sketch[key], value: false });
+    // }
+
+    // take the top n results
+    $scope.filters.sort(function(t1, t2) {
+      return t2.count - t1.count;
+    });
+
+    $scope.filters.length = Math.min(8, $scope.filters.length);
   
     $scope.getNodeName = id => {
       if (id < 0) return "";
@@ -195,12 +210,6 @@ app.controller('GraphController', ['$scope', '$http', '$routeParams', ($scope, $
       else if (!(id in res.neighbors)) return "";
       return res.neighbors[id].t;
     };
-
-    // take the top n results
-    $scope.filters.sort(function(t1, t2) {
-      return t2.count - t1.count;
-    });
-    $scope.filters.length = Math.min(6, $scope.filters.length);
 
     for (var i = 0; i < $scope.filters.length; i++) {
       console.log($scope.keywords[$scope.filters[i].id]);
