@@ -50,6 +50,9 @@
           // drawing a text label (awful alignment jitter otherwise...)
           var label = node.data.label||""
           var w = (node.data._id == $scope.lastNode) ? ctx.measureText(""+label).width + 15 : ctx.measureText(""+label).width
+          if (node.data.center) {
+            w = (node.data._id == $scope.lastNode) ? ctx.measureText(""+label).width + 35 : ctx.measureText(""+label).width + 20
+          }
           if (!(""+label).match(/^[ \t]*$/)){
             pt.x = Math.floor(pt.x)
             pt.y = Math.floor(pt.y)
