@@ -48,7 +48,7 @@ app.controller('SearchController', ['$scope', '$http', '$location', ($scope, $ht
 app.controller('ResultsController', ['$scope', '$http', '$location', '$routeParams', ($scope, $http, $location, $routeParams) => {
   $scope.Math = window.Math;
   $scope.query = $routeParams.query;
-  console.log($scope.query);
+  // console.log($scope.query);
 
   $scope.results = [];
   $scope.currentResults = [];
@@ -211,10 +211,10 @@ app.controller('GraphController', ['$scope', '$http', '$routeParams', ($scope, $
       return res.neighbors[id].t;
     };
 
-    for (var i = 0; i < $scope.filters.length; i++) {
-      console.log($scope.keywords[$scope.filters[i].id]);
-    }
-    console.log(JSON.stringify($scope.filters));
+    // for (var i = 0; i < $scope.filters.length; i++) {
+    //   console.log($scope.keywords[$scope.filters[i].id]);
+    // }
+    // console.log(JSON.stringify($scope.filters));
 
     drawGraph($scope, $scope.paper, res.neighbors);
     $scope.loading = false;
@@ -307,7 +307,7 @@ function dilute(color1, min, max, val, closeness) {
   c1.r += (255 - c1.r) * percentage;
   c1.g += (255 - c1.g) * percentage;
   c1.b += (255 - c1.b) * percentage;
-  console.log(rgbToHex(c1.r, c1.g, c1.b));
+  // console.log(rgbToHex(c1.r, c1.g, c1.b));
   return rgbToHex(c1.r, c1.g, c1.b);
 }
 
